@@ -8,4 +8,8 @@ export class TodosService {
   getAllTodos(): Todo[] {
     return this.todos;
   }
+
+  create(todo: Todo) {
+    console.log(todo);
+  }
 }
