@@ -8,7 +8,6 @@ import { Todo, TodoDocument } from './todos.model';
 
 @Injectable()
 export class TodosService {
-  private readonly todos: Todo[] = [];
   constructor(@InjectModel(Todo.name) private todoModel: Model<TodoDocument>) {}
 
   getAllTodos(): Promise<Todo[]> {
