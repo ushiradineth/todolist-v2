@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Todo } from 'src/interface/todo.interface';
+import { Todo } from './interface/todo.interface';
 
 @Injectable()
 export class TodosService {

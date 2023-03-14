@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CreateTodoDto } from 'src/dto/create-todo.dto';
-import { Todo } from 'src/interface/todo.interface';
+import { CreateTodoDto } from 'src/todos/dto/create-todo.dto';
+import { Todo } from './interface/todo.interface';
 import { TodosService } from './todos.service';
 
 @Controller('todos')
