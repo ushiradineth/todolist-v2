@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Delete, Put } from "@nestjs/common";
+import { Body, Controller, Get, Post, Delete, Put, HttpException, HttpStatus } from "@nestjs/common";
 import { CreateTodoDto } from "src/todos/dto/create-todo.dto";
 import { DeleteTodoDto } from "./dto/delete-todo.dto";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
@@ -12,21 +12,61 @@ export class TodosController {
 
   @Get()
   getAllTodos(): Promise<Todo[]> {
-    return this.todosService.getAllTodos();
+    try {
+      return this.todosService.getAllTodos();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error,
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
   }
 
   @Post()
   async createTodo(@Body() createTodoDto: CreateTodoDto) {
-    return await this.todosService.createTodo(createTodoDto);
+    try {
+      return await this.todosService.createTodo(createTodoDto);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error,
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
   }
 
   @Delete()
   async deleteTodo(@Body() deleteTodoDto: DeleteTodoDto) {
-    return await this.todosService.deleteTodo(deleteTodoDto);
+    try {
+      return await this.todosService.deleteTodo(deleteTodoDto);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error,
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
   }
 
   @Put()
   async updateTodo(@Body() updateTodoDto: UpdateTodoDto) {
-    return await this.todosService.updateTodo(updateTodoDto);
+    try {
+      return await this.todosService.updateTodo(updateTodoDto);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error,
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
   }
 }
