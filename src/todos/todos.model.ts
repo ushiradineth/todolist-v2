@@ -1,14 +1,21 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Field, ObjectType } from "@nestjs/graphql";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { HydratedDocument } from "mongoose";
 
 export type TodoDocument = HydratedDocument<Todo>;
 
 @Schema()
+@ObjectType()
 export class Todo {
-  @Prop({ required: true })
+  @Field()
+  _id: string;
+
+  @Field()
+  @Prop()
   name: string;
 
-  @Prop({ required: true })
+  @Field()
+  @Prop()
   todo: string;
 }
 
