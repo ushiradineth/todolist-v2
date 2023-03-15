@@ -20,10 +20,7 @@ export class TodosService {
   }
 
   async updateTodo(updateTodoDto: UpdateTodoDto): Promise<Todo> {
-    const updatedTodo = await this.todoModel.findOneAndUpdate(
-      { _id: updateTodoDto.id },
-      { todo: updateTodoDto.todo },
-    );
+    const updatedTodo = await this.todoModel.findOneAndUpdate({ _id: updateTodoDto.id }, { todo: updateTodoDto.todo });
 
     return updatedTodo;
   }
