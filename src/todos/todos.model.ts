@@ -17,6 +17,10 @@ export class Todo {
   @Field()
   @Prop()
   todo: string;
+
+  @Field({ nullable: true })
+  @Prop()
+  UUID?: string;
 }
 
 export const TodoSchema = SchemaFactory.createForClass(Todo);

@@ -5,6 +5,7 @@ import { CreateTodoDto } from "./dto/create-todo.dto";
 import { DeleteTodoDto } from "./dto/delete-todo.dto";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
 import { Todo, TodoDocument } from "./todos.model";
+import {v4 as uuid} from 'uuid';
 
 @Injectable()
 export class TodosService {
@@ -18,6 +19,7 @@ export class TodosService {
 
   async getTodoByID(id: string): Promise<Todo> {
     const res: Todo = await this.todoModel.findById(id);
+    res.UUID = uuid();
     this.logger.log("Got todo id:" + res._id);
     return res;
   }

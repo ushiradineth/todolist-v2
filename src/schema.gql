@@ -6,10 +6,12 @@ type Todo {
   _id: String!
   name: String!
   todo: String!
+  UUID: String
 }
 
 type Query {
   getAllTodos: [Todo!]!
+  getOneTodo(todoInput: String!): Todo!
 }
 
 type Mutation {
