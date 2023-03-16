@@ -16,6 +16,12 @@ export class TodosService {
     return this.todoModel.find().exec();
   }
 
+  async getTodoByID(id: string): Promise<Todo> {
+    const res: Todo = await this.todoModel.findById(id);
+    this.logger.log("Got todo id:" + res._id);
+    return res;
+  }
+
   createTodo(createTodoDto: CreateTodoDto): Promise<Todo> {
     const createdTodo = new this.todoModel(createTodoDto);
     this.logger.log("Created todo id:" + createdTodo._id);

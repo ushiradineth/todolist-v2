@@ -1,6 +1,7 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { CreateTodoDto } from "./dto/create-todo.dto";
 import { DeleteTodoDto } from "./dto/delete-todo.dto";
+import { GetTodoDto } from "./dto/get-todo.dto";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
 import { Todo } from "./todos.model";
 import { TodosService } from "./todos.service";
@@ -12,6 +13,11 @@ export class TodosResolver {
   @Query(() => [Todo], { name: "getAllTodos" })
   findAll() {
     return this.todoService.getAllTodos();
+  }
+
+  @Query(() => Todo, { name: "getOneTodo" })
+  findOne(@Args("todoInput") id: string) {
+    return this.todoService.getTodoByID(id);
   }
 
   @Mutation(() => Todo, { name: "createTodo" })
@@ -28,4 +34,6 @@ export class TodosResolver {
   update(@Args("todoInput") todo: UpdateTodoDto) {
     return this.todoService.updateTodo(todo);
   }
+
+  //add logging for each action
 }

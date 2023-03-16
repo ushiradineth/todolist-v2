@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Delete, Put, HttpException, HttpStatus } from "@nestjs/common";
+import { Body, Controller, Get, Post, Delete, Put, HttpException, HttpStatus, Param } from "@nestjs/common";
 import { CreateTodoDto } from "src/todos/dto/create-todo.dto";
 import { DeleteTodoDto } from "./dto/delete-todo.dto";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
@@ -14,6 +14,21 @@ export class TodosController {
   getAllTodos(): Promise<Todo[]> {
     try {
       return this.todosService.getAllTodos();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error,
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  @Get(':id')
+  getTodoByID(@Param('id') id: string): Promise<Todo> {
+    try {
+      return this.todosService.getTodoByID(id);
     } catch (error) {
       throw new HttpException(
         {
