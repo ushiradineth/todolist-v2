@@ -5,6 +5,7 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
 import { TodosModule } from "./todos/todos.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
       }),
     }),
     ConfigModule.forRoot(),
+    HealthModule,
   ],
   controllers: [],
   providers: [],
