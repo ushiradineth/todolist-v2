@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TodosModule } from './todos/todos.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
+import { TodosModule } from './todos/todos.module';
 
 @Module({
   imports: [
@@ -18,7 +16,7 @@ import { join } from 'path';
       'mongodb+srv://ushira:ushira@cluster.9yj1wvz.mongodb.net/?retryWrites=true&w=majority',
     ),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
