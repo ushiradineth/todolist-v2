@@ -12,12 +12,12 @@ export class TodosResolver {
   constructor(private todoService: TodosService) {}
   private readonly logger = new Logger(TodosService.name);
 
-  @Query(() => [Todo], { name: "getAllTodos" })
+  @Query(() => [Todo], { name: "Todos" })
   findAll() {
     return this.todoService.getAllTodos();
   }
 
-  @Query(() => Todo, { name: "getOneTodo" })
+  @Query(() => Todo, { name: "Todo" })
   findOne(@Args("todoInput") id: string) {
     return this.todoService.getTodoByID(id);
   }

@@ -10,8 +10,8 @@ type Todo {
 }
 
 type Query {
-  getAllTodos: [Todo!]!
-  getOneTodo(todoInput: String!): Todo!
+  Todos: [Todo!]!
+  Todo(todoInput: String!): Todo!
 }
 
 type Mutation {
