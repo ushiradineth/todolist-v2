@@ -1,8 +1,9 @@
 import Head from "next/head";
 import { getAllTodos } from "@/util/graphql/query";
-import client from "@/util/apollo-client";
+import { getClient } from "@/util/apollo-client";
 
 export const getServerSideProps = async () => {
+  const client = getClient();
   const { data } = await client.query({ query: getAllTodos });
 
   return {
