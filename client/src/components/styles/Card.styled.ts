@@ -7,5 +7,6 @@ export const Card = styled.div`
   gap: 24px;
   border: 4px;
   border-radius: 12px;
-  border-color: white;
+  background-color: white;
+  padding: 20px;
 `;

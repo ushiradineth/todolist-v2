@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const StyledTitle = styled.h1`
   font-size: 3em;
-  color: white;
+  color: black;
 `;
 
 export default function Title(props: { text: string }) {

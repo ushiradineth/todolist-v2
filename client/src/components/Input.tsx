@@ -14,6 +14,7 @@ const StyledContainer = styled.div`
 const StyledInput = styled.input`
   border-style: none;
   background-color: #3f3f46;
+  color: white;
   box-shadow: none;
   outline: none;
   font-size: 20px;
