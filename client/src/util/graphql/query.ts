@@ -1,17 +1,16 @@
 import { gql } from "@apollo/client";
 
-export const getTodoByID = gql`
-  query {
+export const GET_TODO_BY_ID = gql`
+  query GetTodoById($id: String!) {
     Todo(todoInput: $id) {
       _id
       name
       todo
-      uuid
     }
   }
 `;
 
-export const getAllTodos = gql`
+export const GET_ALL_TODOS = gql`
   query {
     Todos {
       _id
