@@ -3,54 +3,42 @@ import Input from "@/components/Input";
 import Title from "@/components/Title";
 import Head from "next/head";
 import React from "react";
-import { gql, useMutation } from "@apollo/client";
-import styled from "styled-components";
+import { useMutation } from "@apollo/client";
 import { Container } from "@/components/styles/Container.styled";
 import { Card } from "@/components/styles/Card.styled";
-
-const CREATE_TODO = gql`
-  mutation CreateTodo($name: String!, $todo: String!) {
-    createTodo(todoInput: { name: $name, todo: $todo }) {
-      name: name
-      todo: todo
-    }
-  }
-`;
+import { UPDATE_TODO } from "@/util/graphql/mutation";
+import Spinner from "@/components/Spinner";
+import Error from "@/components/Error";
+import BackButton from "@/components/BackButton";
 
 export default function Create() {
-  const [name, setName] = React.useState("");
+  const [id, setID] = React.useState("");
   const [todo, setTodo] = React.useState("");
 
-  const [createTodo, { data, loading, error }] = useMutation(CREATE_TODO);
+  const [updateTodo, { data, loading, error }] = useMutation(UPDATE_TODO);
 
-  React.useEffect(() => {
-    console.log(data, loading, error);
-  }, [data, loading, error]);
+  if (loading) return <Spinner />;
+  if (error) return <Error error={error.message} />;
 
   return (
     <>
       <Head>
-        <title>Create Todo</title>
+        <title>Update Todo</title>
         <meta name="description" content="NestJS API Demo" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
         <Card>
-          <Title text="Create a todo!" />
-          <Body>
-            <Input id="Name" maxlength={50} placeholder="Name" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)} />
+          <BackButton />
+          <Title text="Update a todo!" />
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <Input id="ID" maxlength={50} placeholder="Todo ID" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setID(e.target.value)} />
             <Input id="Todo" maxlength={200} placeholder="Todo" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTodo(e.target.value)} />
-            <Button text="Submit" onClick={() => createTodo({ variables: { name, todo } })} disabled={name.length === 0 || todo.length === 0} />
-          </Body>
+            <Button text="Submit" onClick={() => updateTodo({ variables: { id, todo } })} disabled={id.length === 0 || todo.length === 0} />
+          </div>
         </Card>
       </Container>
     </>
   );
 }
-
-const Body = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
