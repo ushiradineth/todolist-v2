@@ -32,6 +32,7 @@ function Actions() {
       <StyledLink href={"/update"}>Update a Todo</StyledLink>
       <StyledLink href={"/delete"}>Delete a Todo</StyledLink>
       <StyledLink href={"/search"}>Search for a Todo</StyledLink>
+      <StyledLink href={"/ssr"}>SSR</StyledLink>
     </div>
   );
 }
