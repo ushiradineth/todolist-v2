@@ -1,13 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
-const Spinner = () => (
-  <StyledContainer>
+const Spinner = (props: { noBG?: boolean }) =>
+  !props.noBG ? (
+    <StyledContainer>
+      <StyledSpinner viewBox="0 0 50 50">
+        <circle className="path" cx="25" cy="25" r="20" fill="none" strokeWidth="4" />
+      </StyledSpinner>
+    </StyledContainer>
+  ) : (
     <StyledSpinner viewBox="0 0 50 50">
       <circle className="path" cx="25" cy="25" r="20" fill="none" strokeWidth="4" />
     </StyledSpinner>
-  </StyledContainer>
-);
+  );
 
 const StyledContainer = styled.div`
   display: flex;

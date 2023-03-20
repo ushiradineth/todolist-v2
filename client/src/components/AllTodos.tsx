@@ -9,9 +9,9 @@ import { Card } from "./styles/Card.styled";
 export default function AllTodos() {
   const { data, loading, error, refetch } = useQuery<{ Todos: Todo[] }>(GET_ALL_TODOS);
 
-  if (loading) return <Spinner />;
-  if (error) return <Error error={error.message} />;
-  if (!data?.Todos) return <Error error={"Data not found"} />;
+  if (loading) return <Spinner noBG />;
+  if (error) return <p>{error.message}</p>;
+  if (!data?.Todos) return <p>Data not found</p>;
 
   const todos: Todo[] = data.Todos;
 
