@@ -3,11 +3,9 @@ import styled from "styled-components";
 
 export default function Button(props: { disabled: boolean; onClick: (arg0: any) => void; text: string }) {
   return (
-    <Container>
       <StyledButton disabled={props.disabled} id="Submit" onClick={props.onClick}>
         {props.text}
-      </StyledButton>
-    </Container>
+     </StyledButton>
   );
 }
 
@@ -36,10 +34,4 @@ const StyledButton = styled.button`
   :hover {
     background-color: #a1a1aa;
   }
-`;
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
