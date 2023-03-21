@@ -1,15 +1,18 @@
+import { useRouter } from "next/router";
 import React from "react";
-import BackButton from "./BackButton";
+import HomeButton from "./HomeButton";
 import { Card } from "./styles/Card.styled";
 import { Container } from "./styles/Container.styled";
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <Container>
-    <Card>
-      <BackButton />
-      {children}
-    </Card>
-  </Container>
-);
-
-export default Layout
+export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const router = useRouter();
+  
+  return (
+    <Container>
+      <Card>
+        {router.pathname !== "/" && <HomeButton />}
+        {children}
+      </Card>
+    </Container>
+  );
+};

@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import React from "react";
-import { IoMdArrowBack } from "react-icons/io";
+import { IoMdHome } from "react-icons/io";
 import styled from "styled-components";
 
-export default function BackButton() {
+export default function HomeButton() {
   const router = useRouter();
   return (
-    <StyledButton onClick={() => router.back()}>
-      <IoMdArrowBack />
+    <StyledButton onClick={() => router.push("/")}>
+      <IoMdHome />
     </StyledButton>
   );
 }
