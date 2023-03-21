@@ -12,7 +12,9 @@ import { Layout } from "@/components/Layout";
 export default function Create() {
   const [id, setID] = React.useState("");
 
-  const [deleteTodo, { data, loading, error }] = useMutation(DELETE_TODO);
+  const [deleteTodo, { data, loading, error }] = useMutation(DELETE_TODO, {
+    onError: (e) => <Error error={e.message} />,
+  });
 
   if (loading) return <Spinner />;
   if (error) return <Error error={error.message} />;

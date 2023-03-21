@@ -13,7 +13,11 @@ export default function Create() {
   const [name, setName] = React.useState("");
   const [todo, setTodo] = React.useState("");
 
-  const [createTodo, { data, loading, error }] = useMutation(CREATE_TODO);
+  const [createTodo, { data, loading, error }] = useMutation(CREATE_TODO, {
+    onError: (e) => {
+      <Error error={e.message} />;
+    },
+  });
 
   if (loading) return <Spinner />;
   if (error) return <Error error={error.message} />;

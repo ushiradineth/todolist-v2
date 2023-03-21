@@ -7,10 +7,14 @@ import { GET_TODO_BY_ID } from "@/util/graphql/query";
 import { getClient } from "@/util/apollo-client";
 import { TodoItem } from "@/components/AllTodos";
 import { Layout } from "@/components/Layout";
+import Error from "@/components/Error";
 
 export default function Search() {
   const [id, setID] = React.useState("");
   const [result, setResult] = React.useState<Todo | null>();
+  const [error, setError] = React.useState<string | null>();
+
+  if (error) return <Error error={error} />;
 
   return (
     <>
@@ -21,7 +25,7 @@ export default function Search() {
         <Title text="Search for a todo!" />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <Input id="ID" maxlength={50} placeholder="Todo ID" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setID(e.target.value)} />
-          <Button text="Search" onClick={() => GetTodo(setResult, id)} disabled={id.length === 0} />
+          <Button text="Search" onClick={() => GetTodo(setResult, setError, id)} disabled={id.length === 0} />
         </div>
         {result && <TodoItem todo={result} key={result._id} />}
       </Layout>
@@ -29,7 +33,7 @@ export default function Search() {
   );
 }
 
-async function GetTodo(setResult: any, id: string) {
+async function GetTodo(setResult: (value: Todo) => void, setError: (value: string) => void, id: string) {
   const client = getClient();
 
   try {
@@ -39,7 +43,8 @@ async function GetTodo(setResult: any, id: string) {
     });
 
     setResult(data.Todo);
-  } catch (error) {
-    console.error(error);
+  } catch (e) {
+    console.error(e);
+    setError("No results found");
   }
 }

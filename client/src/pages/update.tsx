@@ -13,7 +13,9 @@ export default function Create() {
   const [id, setID] = React.useState("");
   const [todo, setTodo] = React.useState("");
 
-  const [updateTodo, { data, loading, error }] = useMutation(UPDATE_TODO);
+  const [updateTodo, { data, loading, error }] = useMutation(UPDATE_TODO, {
+    onError: (e) => <Error error={e.message} />,
+  });
 
   if (loading) return <Spinner />;
   if (error) return <Error error={error.message} />;
