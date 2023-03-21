@@ -21,6 +21,7 @@ type Query {
   Todo(todoInput: String!): Todo!
   Users: [User!]!
   User(UserInput: String!): User!
+  UserByEmail(UserInput: String!): User!
 }
 
 type Mutation {

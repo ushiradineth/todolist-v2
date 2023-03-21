@@ -19,6 +19,11 @@ export class UserResolver {
     return this.userService.User(id);
   } 
 
+  @Query(() => User, { name: "UserByEmail" })
+  UserByEmail(@Args("UserInput") email: string) {
+    return this.userService.UserByEmail(email);
+  } 
+
   @Mutation(() => User, { name: "CreateUser" })
   createUser(@Args("UserInput") User: CreateUserDto) {
     return this.userService.createUser(User);

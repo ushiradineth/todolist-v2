@@ -22,6 +22,12 @@ export class UserService {
     return res;
   }
 
+  async UserByEmail(email: string): Promise<User> {
+    const res: User = await this.userModel.findOne({ email });
+    this.logger.log("Got user email:" + res.email);
+    return res;
+  }
+
   createUser(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
     this.logger.log("Created user id:" + createdUser._id);
