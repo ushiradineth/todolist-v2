@@ -11,6 +11,17 @@ export const GET_USER_BY_ID = gql`
   }
 `;
 
+export const GET_USER_BY_EMAIL = gql`
+  query ($email: String!) {
+    UserByEmail(UserInput: $email) {
+      _id
+      email
+      name
+      password
+    }
+  }
+`;
+
 export const GET_ALL_USERS = gql`
   query {
     Todos {
