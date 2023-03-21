@@ -7,7 +7,7 @@ import { useMutation } from "@apollo/client";
 import { DELETE_TODO } from "@/util/graphql/mutation";
 import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
-import Layout from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 
 export default function Create() {
   const [id, setID] = React.useState("");

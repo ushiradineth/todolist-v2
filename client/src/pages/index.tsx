@@ -1,5 +1,5 @@
 import AllTodos from "@/components/AllTodos";
-import Layout from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 import { StyledLink } from "@/components/styles/Link.styled";
 import Title from "@/components/Title";
 import Head from "next/head";

@@ -3,7 +3,7 @@ import { GET_ALL_TODOS } from "@/util/graphql/query";
 import { getClient } from "@/util/apollo-client";
 import Title from "@/components/Title";
 import { TodoItem } from "@/components/AllTodos";
-import Layout from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 
 export const getServerSideProps = async () => {
   const client = getClient();

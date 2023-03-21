@@ -6,7 +6,7 @@ import React from "react";
 import { GET_TODO_BY_ID } from "@/util/graphql/query";
 import { getClient } from "@/util/apollo-client";
 import { TodoItem } from "@/components/AllTodos";
-import Layout from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 
 export default function Search() {
   const [id, setID] = React.useState("");
