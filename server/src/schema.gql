@@ -59,6 +59,6 @@ input DeleteUserDto {
 input UpdateUserDto {
   id: String!
   email: String!
-  username: String!
+  name: String!
   password: String!
 }

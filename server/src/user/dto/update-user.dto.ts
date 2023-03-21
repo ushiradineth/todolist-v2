@@ -18,7 +18,7 @@ export class UpdateUserDto {
   @ApiProperty({ description: "Name of the user" })
   @ValidateIf((object, value) => value !== null)
   @Field()
-  public username: string | null;
+  public name: string | null;
 
   @ApiProperty({ description: "Password of the user" })
   @ValidateIf((object, value) => value !== null)
