@@ -5,11 +5,13 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
 import { TodosModule } from "./todos/todos.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { HealthModule } from './health/health.module';
+import { HealthModule } from "./health/health.module";
+import { UserModule } from "./user/user.module";
 
 @Module({
   imports: [
     TodosModule,
+    UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), "src/schema.gql"),
