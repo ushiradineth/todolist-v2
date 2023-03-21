@@ -1,6 +1,5 @@
 import AllTodos from "@/components/AllTodos";
-import { Card } from "@/components/styles/Card.styled";
-import { Container } from "@/components/styles/Container.styled";
+import Layout from "@/components/Layout";
 import { StyledLink } from "@/components/styles/Link.styled";
 import Title from "@/components/Title";
 import Head from "next/head";
@@ -11,13 +10,11 @@ export default function Home() {
       <Head>
         <title>NestJS API Demo Frontend with NextJS</title>
       </Head>
-      <Container>
-        <Card>
-          <Title text="All todos!" />
-          <AllTodos />
-          <Actions />
-        </Card>
-      </Container>
+      <Layout>
+        <Title text="All todos!" />
+        <AllTodos />
+        <Actions />
+      </Layout>
     </>
   );
 }
