@@ -3,7 +3,7 @@ import Input from "@/components/Input";
 import Title from "@/components/Title";
 import Head from "next/head";
 import React from "react";
-import { GET_TODO_BY_ID } from "@/util/graphql/query";
+import { GET_TODO_BY_ID } from "@/util/graphql/todo/query";
 import { getClient } from "@/util/apollo-client";
 import { TodoItem } from "@/components/AllTodos";
 import { Layout } from "@/components/Layout";

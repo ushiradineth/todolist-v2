@@ -4,10 +4,10 @@ import Title from "@/components/Title";
 import Head from "next/head";
 import React from "react";
 import { useMutation } from "@apollo/client";
-import { UPDATE_TODO } from "@/util/graphql/mutation";
 import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
 import { Layout } from "@/components/Layout";
+import { UPDATE_TODO } from "@/util/graphql/todo/mutation";
 
 export default function Create() {
   const [id, setID] = React.useState("");

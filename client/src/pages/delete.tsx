@@ -4,7 +4,7 @@ import Title from "@/components/Title";
 import Head from "next/head";
 import React from "react";
 import { useMutation } from "@apollo/client";
-import { DELETE_TODO } from "@/util/graphql/mutation";
+import { DELETE_TODO } from "@/util/graphql/todo/mutation";
 import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
 import { Layout } from "@/components/Layout";

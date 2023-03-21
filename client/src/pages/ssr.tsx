@@ -1,10 +1,10 @@
 import Head from "next/head";
-import { GET_ALL_TODOS } from "@/util/graphql/query";
 import { getClient } from "@/util/apollo-client";
 import Title from "@/components/Title";
 import { TodoItem } from "@/components/AllTodos";
 import { Layout } from "@/components/Layout";
 import Error from "@/components/Error";
+import { GET_ALL_TODOS } from "@/util/graphql/todo/query";
 
 export const getServerSideProps = async () => {
   const client = getClient();

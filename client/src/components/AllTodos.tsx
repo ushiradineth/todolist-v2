@@ -1,4 +1,4 @@
-import { GET_ALL_TODOS } from "@/util/graphql/query";
+import { GET_ALL_TODOS } from "@/util/graphql/todo/query";
 import { useQuery } from "@apollo/client";
 import React from "react";
 import Spinner from "./Spinner";
