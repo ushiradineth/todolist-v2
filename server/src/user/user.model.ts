@@ -23,7 +23,6 @@ export class User {
   name: string;
 
   @ApiProperty()
-  @Field()
   @Prop()
   password: string;
 }
