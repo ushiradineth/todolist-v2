@@ -6,7 +6,6 @@ export const GET_USER_BY_ID = gql`
       _id
       email
       name
-      password
     }
   }
 `;
@@ -17,7 +16,16 @@ export const GET_USER_BY_EMAIL = gql`
       _id
       email
       name
-      password
+    }
+  }
+`;
+
+export const AUTHENTICATE_USER = gql`
+  query ($email: String!, $password: String!) {
+    UserAuthentication (UserInput: { email: $email, password: $password }) {
+      _id
+      email
+      name
     }
   }
 `;
