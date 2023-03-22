@@ -10,6 +10,7 @@ import Input from "@/components/Input";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import toast from "@/components/Toast";
+import css from "styled-jsx/css";
 
 const Auth = () => {
   const [loginMenu, setLoginMenu] = useState(true);
@@ -98,44 +99,23 @@ const Auth = () => {
         <title>{loginMenu ? "Login" : "Register"}</title>
       </Head>
       <Container>
-        <StyledCard>
+        <div style={{ backgroundColor: "white", borderRadius: "8px" }}>
           <StyledDiv>
-            {loginMenu ? (
-              <StyledBtn id="LoginBtn" onClick={() => setLoginMenu(true)}>
-                Login
-              </StyledBtn>
-            ) : (
-              <StyledLoginActive id="LoginBtn" onClick={() => setLoginMenu(true)}>
-                Login
-              </StyledLoginActive>
-            )}
-            {!loginMenu ? (
-              <StyledBtn id="RegisterBtn" onClick={() => setLoginMenu(false)}>
-                Register
-              </StyledBtn>
-            ) : (
-              <StyledRegisterActive id="RegisterBtn" onClick={() => setLoginMenu(false)}>
-                Register
-              </StyledRegisterActive>
-            )}
+            <StyledLogin login={!loginMenu} id="LoginBtn" onClick={() => setLoginMenu(true)}>
+              Login
+            </StyledLogin>
+            <StyledRegister login={loginMenu} id="RegisterBtn" onClick={() => setLoginMenu(false)}>
+              Register
+            </StyledRegister>
           </StyledDiv>
-          <StyledSection>{loginMenu ? <LoginMenu /> : <RegisterMenu />}</StyledSection>
-        </StyledCard>
+          <section style={{ padding: "8px 24px 24px 24px" }}>{loginMenu ? <LoginMenu /> : <RegisterMenu />}</section>
+        </div>
       </Container>
     </>
   );
 };
 
 export default Auth;
-
-const StyledSection = styled.section`
-  padding: 8px 24px 24px 24px;
-`;
-
-const StyledCard = styled.form`
-  background-color: white;
-  border-radius: 8px;
-`;
 
 const StyledForm = styled.div`
   margin-top: 12px;
@@ -152,7 +132,7 @@ const StyledDiv = styled.div`
   font-weight: bold;
 `;
 
-const StyledBtn = styled.div`
+const StyledLogin = styled.div<{ login: boolean }>`
   display: flex;
   height: 48px;
   width: 100%;
@@ -160,9 +140,18 @@ const StyledBtn = styled.div`
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  ${({ login }) =>
+    login &&
+    `
+    border-top-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-top: 4px;
+    border-left: 4px;
+    background-color: #c2c2c2;
+  `}
 `;
 
-const StyledLoginActive = styled.div`
+const StyledRegister = styled.div<{ login: boolean }>`
   display: flex;
   height: 48px;
   width: 100%;
@@ -170,26 +159,13 @@ const StyledLoginActive = styled.div`
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  border-style: solid;
-  border-top-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  border-top: 4px;
-  border-left: 4px;
-  background-color: #c2c2c2;
-`;
-
-const StyledRegisterActive = styled.div`
-  display: flex;
-  height: 48px;
-  width: 100%;
-  user-select: none;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  border-style: solid;
-  border-top-right-radius: 6px;
-  border-bottom-left-radius: 6px;
-  border-top: 4px;
-  border-right: 4px;
-  background-color: #c2c2c2;
+  ${({ login }) =>
+    login &&
+    `
+    border-top-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-top: 4px;
+    border-right: 4px;
+    background-color: #c2c2c2;
+  `}
 `;
