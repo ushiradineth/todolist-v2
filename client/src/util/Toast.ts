@@ -1,4 +1,3 @@
-import React from "react";
 import { toast as T } from "react-toastify";
 
 export default function toast(text: string, type: "info" | "success" | "warning" | "error" | "default") {

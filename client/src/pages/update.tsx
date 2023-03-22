@@ -8,7 +8,7 @@ import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
 import { Layout } from "@/components/Layout";
 import { UPDATE_TODO } from "@/util/graphql/todo/mutation";
-import toast from "@/components/Toast";
+import toast from "@/util/Toast";
 
 export default function Create() {
   const [id, setID] = React.useState("");
