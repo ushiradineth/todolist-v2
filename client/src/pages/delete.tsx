@@ -8,12 +8,14 @@ import { DELETE_TODO } from "@/util/graphql/todo/mutation";
 import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
 import { Layout } from "@/components/Layout";
+import toast from "@/components/Toast";
 
 export default function Create() {
   const [id, setID] = React.useState("");
 
   const [deleteTodo, { data, loading, error }] = useMutation(DELETE_TODO, {
     onError: (e) => <Error error={e.message} />,
+    onCompleted: () => toast("Deleted Todo", "success"),
   });
 
   if (loading) return <Spinner />;
@@ -27,7 +29,7 @@ export default function Create() {
       <Layout>
         <Title text="Delete a todo!" />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          <Input id="ID" maxlength={50} placeholder="Todo ID" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setID(e.target.value)} />
+          <Input id="ID" type="text" maxlength={50} placeholder="Todo ID" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setID(e.target.value)} />
           <Button text="Submit" onClick={() => deleteTodo({ variables: { id } })} disabled={id.length === 0} />
         </div>
       </Layout>
