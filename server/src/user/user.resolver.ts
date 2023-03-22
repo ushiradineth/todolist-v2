@@ -4,6 +4,7 @@ import { User } from "./user.model";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { AuthUserDto } from "./dto/auth-user.dto";
 
 @Resolver(() => User)
 export class UserResolver {
@@ -23,6 +24,11 @@ export class UserResolver {
   UserByEmail(@Args("UserInput") email: string) {
     return this.userService.UserByEmail(email);
   } 
+
+  @Query(() => User, { name: "UserAuthentication" })
+  Authenticate(@Args("UserInput") User: AuthUserDto) {
+    return this.userService.Authenticate(User);
+  }
 
   @Mutation(() => User, { name: "CreateUser" })
   createUser(@Args("UserInput") User: CreateUserDto) {
