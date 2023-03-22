@@ -42,14 +42,23 @@ export class UserService {
     }
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const salt = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(createUserDto.password, salt);
-    createUserDto.password = hash;
-    const createdUser = new this.userModel(createUserDto);
+  async createUser(createUserDto: CreateUserDto): Promise<User | Error> {
+    try {
+      const doesUserExist = await this.userModel.findOne({ email: createUserDto.email });
 
-    this.logger.log("Created user id: " + createdUser._id);
-    return createdUser.save();
+      return {
+        name: "User exists",
+        message: "User already exists",
+      } as Error;
+    } catch (error) {
+      const salt = await bcrypt.genSalt();
+      const hash = await bcrypt.hash(createUserDto.password, salt);
+      createUserDto.password = hash;
+      const createdUser = new this.userModel(createUserDto);
+
+      this.logger.log("Created user id: " + createdUser._id);
+      return createdUser.save();
+    }
   }
 
   async updateUser(updateUserDto: UpdateUserDto): Promise<User> {

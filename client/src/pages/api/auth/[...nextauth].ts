@@ -1,30 +1,12 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { verify } from "argon2";
-import { ApolloClient, gql, HttpLink, InMemoryCache } from "@apollo/client";
+import { getClient } from "@/util/apollo-client";
+import { AUTHENTICATE_USER } from "@/util/graphql/user/query";
 
 type User = {
   [key: string]: any;
   name: string;
 };
-
-const client = new ApolloClient({
-  link: new HttpLink({
-    uri: process.env.API_URL,
-  }),
-  cache: new InMemoryCache(),
-});
-
-const GET_USER_BY_EMAIL = gql`
-  query ($email: String!) {
-    UserByEmail(UserInput: $email) {
-      _id
-      email
-      name
-      password
-    }
-  }
-`;
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -60,26 +42,18 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const { data } = await client.query({ query: GET_USER_BY_EMAIL, variables: { email: "ushiradineth@gmail.com" } });
+        const client = getClient();
+        
+        const { data } = await client.query({ query: AUTHENTICATE_USER, variables: { email: credentials?.email, password: credentials?.password } });
 
-        if (!data || !credentials?.email || !credentials?.password) {
+        if (!data) {
           return null;
-        }
-
-        // const isValidPassword = await verify(data.password, credentials.password);
-
-        // if (!isValidPassword) {
-        //   return null;
-        // }
-
-        if (data.UserByEmail.password !== credentials.password) {
-          return null;
-        }
+        }        
 
         return {
-          id: data.UserByEmail._id,
-          email: data.UserByEmail.email,
-          name: data.UserByEmail.name,
+          id: data.UserAuthentication._id,
+          email: data.UserAuthentication.email,
+          name: data.UserAuthentication.name,
         };
       },
     }),

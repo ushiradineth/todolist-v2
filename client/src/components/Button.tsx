@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function Button(props: { disabled: boolean; onClick: (arg0: any) => void; text: string }) {
+export default function Button(props: { disabled: boolean; onClick?: (arg0: any) => void; text: string }) {
   return (
-      <StyledButton disabled={props.disabled} id="Submit" onClick={props.onClick}>
+      <StyledButton disabled={props.disabled} id={props.text} type={"button"} onClick={props.onClick}>
         {props.text}
      </StyledButton>
   );

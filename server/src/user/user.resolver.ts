@@ -18,12 +18,12 @@ export class UserResolver {
   @Query(() => User, { name: "User" })
   User(@Args("UserInput") id: string) {
     return this.userService.User(id);
-  } 
+  }
 
   @Query(() => User, { name: "UserByEmail" })
   UserByEmail(@Args("UserInput") email: string) {
     return this.userService.UserByEmail(email);
-  } 
+  }
 
   @Query(() => User, { name: "UserAuthentication" })
   Authenticate(@Args("UserInput") User: AuthUserDto) {
