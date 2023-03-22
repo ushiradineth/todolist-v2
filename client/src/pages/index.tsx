@@ -1,6 +1,5 @@
 import AllTodos from "@/components/AllTodos";
 import Button from "@/components/Button";
-import { Layout } from "@/components/Layout";
 import { Card } from "@/components/styles/Card.styled";
 import { Container } from "@/components/styles/Container.styled";
 import { StyledLink } from "@/components/styles/Link.styled";
@@ -8,7 +7,6 @@ import Title from "@/components/Title";
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import styled from "styled-components";
 
 export default function Home() {
   return (
@@ -29,18 +27,16 @@ export default function Home() {
 
 function Actions() {
   return (
-    <Sidebar>
+    <div style={{ display: "flex", flexDirection: "column" }}>
       <Card>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <StyledLink href={"/create"}>Create a Todo</StyledLink>
-          <StyledLink href={"/update"}>Update a Todo</StyledLink>
-          <StyledLink href={"/delete"}>Delete a Todo</StyledLink>
-          <StyledLink href={"/search"}>Search for a Todo</StyledLink>
-          <StyledLink href={"/ssr"}>SSR</StyledLink>
-        </div>
+        <StyledLink href={"/create"}>Create a Todo</StyledLink>
+        <StyledLink href={"/update"}>Update a Todo</StyledLink>
+        <StyledLink href={"/delete"}>Delete a Todo</StyledLink>
+        <StyledLink href={"/search"}>Search for a Todo</StyledLink>
+        <StyledLink href={"/ssr"}>SSR</StyledLink>
       </Card>
       <Profile />
-    </Sidebar>
+    </div>
   );
 }
 
@@ -56,11 +52,3 @@ function Profile() {
     </Card>
   );
 }
-
-const Sidebar = styled.div`
-  display: "flex";
-  flex-direction: "column";
-  justify-content: "start";
-  background-color: chartreuse;
-  height: 100vh;
-`;
