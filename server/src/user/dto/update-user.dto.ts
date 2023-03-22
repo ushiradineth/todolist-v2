@@ -12,16 +12,16 @@ export class UpdateUserDto {
 
   @ApiProperty({ description: "Email of the user" })
   @ValidateIf((object, value) => value !== null)
-  @Field()
+  @Field({ nullable: true })
   public email: string | null;
 
   @ApiProperty({ description: "Name of the user" })
   @ValidateIf((object, value) => value !== null)
-  @Field()
+  @Field({ nullable: true })
   public name: string | null;
 
   @ApiProperty({ description: "Password of the user" })
   @ValidateIf((object, value) => value !== null)
-  @Field()
+  @Field({ nullable: true })
   public password: string | null;
 }
