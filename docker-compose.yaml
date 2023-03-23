@@ -15,9 +15,13 @@ services:
     container_name: server
     ports:
       - 3000:3000
+    depends_on:
+      - mongodb
 
   client: 
     build: ./client
     container_name: client
     ports:
       - 3001:3001
+    depends_on:
+      - server
