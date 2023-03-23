@@ -17,6 +17,11 @@ export class TodosResolver {
     return this.todoService.getAllTodos();
   }
 
+  @Query(() => [Todo], { name: "UserTodos" })
+  findAllTodosByUser(@Args("todoInput") id: string) {
+    return this.todoService.getAllTodosByUserID(id);
+  }
+
   @Query(() => Todo, { name: "Todo" })
   findOne(@Args("todoInput") id: string) {
     return this.todoService.getTodoByID(id);
