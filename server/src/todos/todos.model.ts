@@ -15,7 +15,7 @@ export class Todo {
   @ApiProperty()
   @Field()
   @Prop()
-  name: string;
+  userID: string;
 
   @ApiProperty()
   @Field()

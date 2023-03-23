@@ -25,6 +25,11 @@ export class User {
   @ApiProperty()
   @Prop()
   password: string;
+
+  @ApiProperty()
+  @Field((type) => [String], { nullable: true })
+  @Prop({ type: [] })
+  Todos: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

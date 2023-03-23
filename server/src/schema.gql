@@ -2,21 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Todo {
-  _id: String!
-  name: String!
-  todo: String!
-  uuid: String!
-}
-
 type User {
   _id: String!
   email: String!
   name: String!
+  Todos: [String!]
+}
+
+type Todo {
+  _id: String!
+  userID: String!
+  todo: String!
+  uuid: String!
 }
 
 type Query {
   Todos: [Todo!]!
+  UserTodos(todoInput: String!): [Todo!]!
   Todo(todoInput: String!): Todo!
   Users: [User!]!
   User(UserInput: String!): User!
@@ -39,7 +41,7 @@ type Mutation {
 }
 
 input CreateTodoDto {
-  name: String!
+  userID: String!
   todo: String!
 }
 
