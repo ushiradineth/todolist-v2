@@ -4,15 +4,19 @@ import Title from "@/components/Title";
 import { TodoItem } from "@/components/AllTodos";
 import { Layout } from "@/components/Layout";
 import Error from "@/components/Error";
-import { GET_ALL_TODOS } from "@/util/graphql/todo/query";
+import { GET_ALL_TODOS_BY_USER } from "@/util/graphql/todo/query";
+import { getSession } from "next-auth/react";
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (ctx) => {
   const client = getClient();
+
+  const { req } = ctx;
+  const session = await getSession({ req });
   try {
-    const { data } = await client.query({ query: GET_ALL_TODOS });
+    const { data } = await client.query({ query: GET_ALL_TODOS_BY_USER, variables: { id: session?.user.id } });
     return {
       props: {
-        todos: data.Todos as Todo[],
+        todos: data.UserTodos as Todo[],
       },
     };
   } catch (error) {
