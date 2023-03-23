@@ -84,4 +84,16 @@ export class UserService {
     this.logger.log("Deleted user id: " + deletedUser._id);
     return deletedUser;
   }
+
+  async linkTodo(userID: string, todoID: string): Promise<User> {
+    const updatedUser = await this.userModel.findByIdAndUpdate({ _id: userID }, { $push: { Todos: todoID } });
+    this.logger.log(`Linked todo ${todoID} to user ${userID}`);
+    return updatedUser;
+  }
+
+  async unlinkTodo(userID: string, todoID: string): Promise<User> {
+    const updatedUser = await this.userModel.findByIdAndUpdate({ _id: userID }, { $pull: { Todos: todoID } });
+    this.logger.log(`Unlinked todo ${todoID} from user ${userID}`);
+    return updatedUser;
+  }
 }
