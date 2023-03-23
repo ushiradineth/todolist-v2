@@ -1,13 +1,14 @@
 version: '3.8'
 services:
-  # mongodb:
-  #   image: mongo:latest
-  #   env_file:
-  #     - ./server/.env
-  #   ports:
-  #     - 27017:27017
-  #   volumes:
-  #     - mongodb_data_container:/data/db
+  mongodb:
+    container_name: mongodb
+    restart: always
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=ushira
+      - MONGO_INITDB_ROOT_PASSWORD=ushira
+    ports:
+      - 27017:27017
 
   server: 
     build: ./server
@@ -20,6 +21,3 @@ services:
     container_name: client
     ports:
       - 3001:3001
-
-# volumes:
-#   mongodb_data_container:

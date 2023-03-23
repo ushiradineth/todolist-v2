@@ -2,10 +2,12 @@ FROM node:18-alpine
 
 WORKDIR /client
 
-COPY ./client .
+COPY . .
+
+RUN yarn
 
 RUN yarn build
 
 EXPOSE 3001
 
-CMD yarn dev
+CMD yarn start
