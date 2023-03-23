@@ -6,8 +6,9 @@ import { Layout } from "@/components/Layout";
 import Error from "@/components/Error";
 import { GET_ALL_TODOS_BY_USER } from "@/util/graphql/todo/query";
 import { getSession } from "next-auth/react";
+import { GetServerSidePropsContext } from "next";
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const client = getClient();
 
   const { req } = ctx;
