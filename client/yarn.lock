@@ -203,6 +203,11 @@
   resolved "https://registry.npmjs.org/@graphql-typed-document-node/core/-/core-3.1.2.tgz"
   integrity sha512-9anpBMM9mEgZN4wr2v8wHJI2/u5TnnggewRN6OlvXTTnuVyoY19X6rOv9XTqKRw6dcGKwZsBi8n0kDE2I5i4VA==
 
+"@hookform/resolvers@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.0.0.tgz#bb9346f1550a472a980af5b08e549366c788ff76"
+  integrity sha512-SQPefakODpyq25b/phHXDKCdRrEfPcCXV7B4nAa139wE1DxufYbbNAjeo0T04ZXBokRxZ+wD8iA1kkVMa3QwjQ==
+
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.npmjs.org/@humanwhocodes/config-array/-/config-array-0.11.8.tgz"
@@ -2300,6 +2305,11 @@ react-dom@18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
+
+react-hook-form@^7.43.7:
+  version "7.43.7"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.43.7.tgz#88b8bc257635d706955e19c05254fb492fa77ad1"
+  integrity sha512-38yehQkQQ5uufaPKFScs7jhLE8n3+LG9H/BZfFAiBL2+7piDmw/BrdNJV4irzMaPnWZGhmGLHVICHXNVGIuXZg==
 
 react-icons@^4.8.0:
   version "4.8.0"
