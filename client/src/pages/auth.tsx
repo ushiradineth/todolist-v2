@@ -55,7 +55,7 @@ export const PasswordLog = (props: { password: string }) => {
   );
 };
 
-export const StyledForm = styled.div`
+export const StyledForm = styled.form`
   margin-top: 12px;
   display: grid;
   gap: 12px;
