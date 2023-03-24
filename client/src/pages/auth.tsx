@@ -4,7 +4,6 @@ import Head from "next/head.js";
 import { z } from "zod";
 import { CREATE_USER } from "@/util/graphql/user/mutation";
 import { useMutation } from "@apollo/client";
-import { Container } from "@/components/styles/Container.styled";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import styled from "styled-components";
@@ -23,18 +22,19 @@ const Auth = () => {
 
     useEffect(() => {
       const EmailVState = z.string().email().safeParse(email);
-
       if (emailValidation !== EmailVState.success) {
         setEmailValidation(EmailVState.success);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [email]);
 
+    useEffect(() => {
       const PasswordVState = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,20})/.test(password);
       if (passwordValidation !== PasswordVState) {
         setPasswordValidation(PasswordVState);
       }
-
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [email, password]);
+    }, [password]);
 
     const onLogin = async () => {
       const login = await signIn("credentials", { email, password, callbackUrl: "/", redirect: false });
@@ -46,6 +46,7 @@ const Auth = () => {
       <StyledForm>
         <Input id="email" placeholder="Email" type="Email" onChange={(e) => setEmail(e.currentTarget.value)} />
         <Input id="password" placeholder="Password" type="Password" minlength={8} maxlength={20} onChange={(e) => setPassword(e.currentTarget.value)} />
+        <PasswordLog password={password} />
         <Button disabled={!emailValidation || !passwordValidation} text={"Login"} onClick={() => onLogin()} />
       </StyledForm>
     );
@@ -72,21 +73,23 @@ const Auth = () => {
       if (nameValidation !== NameVState.success) {
         setNameValidation(NameVState.success);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [email, name]);
 
+    useEffect(() => {
       const PasswordVState = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,20})/.test(password);
-
       if (passwordValidation !== PasswordVState) {
         setPasswordValidation(PasswordVState);
       }
-
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [email, name, password]);
+    }, [password]);
 
     return (
       <StyledForm>
         <Input type="text" id="name" placeholder="Name" minlength={1} maxlength={100} onChange={(e) => setName(e.currentTarget.value)} />
         <Input type="email" id="email" placeholder="Email" onChange={(e) => setEmail(e.currentTarget.value)} />
         <Input type="password" id="password" placeholder="Password" minlength={8} maxlength={20} onChange={(e) => setPassword(e.currentTarget.value)} />
+        <PasswordLog password={password} />
         <Button disabled={!emailValidation || !nameValidation || !passwordValidation} text={"Register"} onClick={() => createUser({ variables: { email, name, password } })} />
       </StyledForm>
     );
@@ -97,24 +100,48 @@ const Auth = () => {
       <Head>
         <title>{loginMenu ? "Login" : "Register"}</title>
       </Head>
-      <Container>
-        <div style={{ backgroundColor: "white", borderRadius: "8px" }}>
-          <StyledDiv>
-            <StyledLogin login={!loginMenu} id="LoginBtn" onClick={() => setLoginMenu(true)}>
-              Login
-            </StyledLogin>
-            <StyledRegister login={loginMenu} id="RegisterBtn" onClick={() => setLoginMenu(false)}>
-              Register
-            </StyledRegister>
-          </StyledDiv>
-          <section style={{ padding: "8px 24px 24px 24px" }}>{loginMenu ? <LoginMenu /> : <RegisterMenu />}</section>
-        </div>
-      </Container>
+      <div style={{ backgroundColor: "white", borderRadius: "8px" }}>
+        <StyledDiv>
+          <StyledLogin login={!loginMenu} id="LoginBtn" onClick={() => setLoginMenu(true)}>
+            Login
+          </StyledLogin>
+          <StyledRegister login={loginMenu} id="RegisterBtn" onClick={() => setLoginMenu(false)}>
+            Register
+          </StyledRegister>
+        </StyledDiv>
+        <section style={{ padding: "8px 24px 24px 24px" }}>{loginMenu ? <LoginMenu /> : <RegisterMenu />}</section>
+      </div>
     </>
   );
 };
 
 export default Auth;
+
+const PasswordLog = (props: { password: string }) => {
+  const [passwordLog, setPasswordLog] = useState<string[]>([]);
+  useEffect(() => {
+    var errors: string[] = [];
+    !/^(?=.*[A-Z])/.test(props.password) && errors.push("Uppercase Character");
+    !/^(?=.*[0-9])/.test(props.password) && errors.push("Number");
+    !/^(?=.*[!@#\$%\^&\*])/.test(props.password) && errors.push("Special Character");
+    !/^(?=.{8,20})/.test(props.password) && errors.push("Minimum 8 Characters");
+    setPasswordLog(errors);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.password]);
+
+  return (
+    <>
+      {passwordLog.length > 0 && (
+        <ul>
+          {passwordLog.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
+};
 
 const StyledForm = styled.div`
   margin-top: 12px;
