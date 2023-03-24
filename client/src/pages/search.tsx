@@ -13,6 +13,7 @@ export default function Search() {
   const [id, setID] = React.useState("");
   const [result, setResult] = React.useState<Todo | null>();
   const [error, setError] = React.useState<string | null>();
+  const [loading, setLoading] = React.useState(false);
 
   if (error) return <Error error={error} />;
 
@@ -25,7 +26,7 @@ export default function Search() {
         <Title text="Search for a todo!" />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <Input id="ID" type="text" maxlength={50} placeholder="Todo ID" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setID(e.target.value)} />
-          <Button text="Search" onClick={() => GetTodo(setResult, setError, id)} disabled={id.length === 0} />
+          <Button loading={loading} text="Search" onClick={() => GetTodo(setResult, setError, setLoading, id)} disabled={id.length === 0} />
         </div>
         {result && <TodoItem todo={result} key={result._id} />}
       </Card>
@@ -33,18 +34,21 @@ export default function Search() {
   );
 }
 
-async function GetTodo(setResult: (value: Todo) => void, setError: (value: string) => void, id: string) {
+async function GetTodo(setResult: (value: Todo) => void, setError: (value: string) => void, setLoading: (value: boolean) => void, id: string) {
   const client = getClient();
 
   try {
+    setLoading(true);
     const { data } = await client.query({
       query: GET_TODO_BY_ID,
       variables: { id },
     });
 
     setResult(data.Todo);
+    setLoading(false);
   } catch (e) {
     console.error(e);
     setError("No results found");
+    setLoading(false);
   }
 }

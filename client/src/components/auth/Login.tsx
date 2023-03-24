@@ -12,6 +12,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const [emailValidation, setEmailValidation] = useState(false);
   const [passwordValidation, setPasswordValidation] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -43,8 +44,10 @@ export const Login = () => {
   }, [password]);
 
   const onLogin = async () => {
+    setLoading(true)
     const login = await signIn("credentials", { email, password, callbackUrl: "/", redirect: false });
     login?.status === 401 ? toast("Invalid Credentials", "warning") : login?.error && toast(login?.error, "error");
+    setLoading(false)
     login?.ok && router.push("/");
   };
 
@@ -53,7 +56,7 @@ export const Login = () => {
       <Input id="email" placeholder="Email" type="Email" onChange={(e) => setEmail(e.currentTarget.value)} />
       <Input id="password" placeholder="Password" type="Password" minlength={8} maxlength={20} onChange={(e) => setPassword(e.currentTarget.value)} />
       <PasswordLog password={password} />
-      <Button disabled={!emailValidation || !passwordValidation} text={"Login"} onClick={() => onLogin()} />
+      <Button loading={loading} disabled={!emailValidation || !passwordValidation} text={"Login"} onClick={() => onLogin()} />
     </StyledForm>
   );
 };

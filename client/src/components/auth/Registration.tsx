@@ -14,7 +14,7 @@ export const Register = () => {
   const [emailValidation, setEmailValidation] = useState(false);
   const [passwordValidation, setPasswordValidation] = useState(false);
   const [nameValidation, setNameValidation] = useState(false);
-  const [createUser] = useMutation(CREATE_USER, { onError: (e) => toast(e.networkError ? "Error creating User." : "User already exists.", "error"), onCompleted: () => toast("User created!", "success") });
+  const [createUser, { loading }] = useMutation(CREATE_USER, { onError: (e) => toast(e.networkError ? "Error creating User." : "User already exists.", "error"), onCompleted: () => toast("User created!", "success") });
 
   useEffect(() => {
     yup
@@ -62,7 +62,7 @@ export const Register = () => {
       <Input type="email" id="email" placeholder="Email" onChange={(e) => setEmail(e.currentTarget.value)} />
       <Input type="password" id="password" placeholder="Password" minlength={8} maxlength={20} onChange={(e) => setPassword(e.currentTarget.value)} />
       <PasswordLog password={password} />
-      <Button disabled={!emailValidation || !nameValidation || !passwordValidation} text={"Register"} onClick={() => createUser({ variables: { email, name, password } })} />
+      <Button loading={loading} disabled={!emailValidation || !nameValidation || !passwordValidation} text={"Register"} onClick={() => createUser({ variables: { email, name, password } })} />
     </StyledForm>
   );
 };

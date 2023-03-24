@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import Spinner from "./Spinner";
 
-export default function Button(props: { disabled: boolean; onClick?: (arg0: any) => void; text: string }) {
+export default function Button(props: { loading?: boolean; disabled: boolean; onClick?: (arg0: any) => void; text: string }) {
   return (
-      <StyledButton disabled={props.disabled} id={props.text} type={"button"} onClick={props.onClick}>
-        {props.text}
+      <StyledButton disabled={props.disabled || props.loading} id={props.text} type={"button"} onClick={props.onClick}>
+        {props.loading ? <Spinner noBG /> : props.text}
      </StyledButton>
   );
 }
