@@ -41,10 +41,6 @@ function Actions() {
 }
 
 function Profile() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  if (status === "unauthenticated" && router.pathname !== "/404" && router.pathname !== "/500") router.push("/auth");
-
   return (
     <Card>
       <p>{session?.user.email}</p>
