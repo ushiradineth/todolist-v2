@@ -3,6 +3,7 @@ import Head from "next/head.js";
 import styled from "styled-components";
 import { Login } from "@/components/auth/Login";
 import { Register } from "@/components/auth/Registration";
+import { TabbedMenu, TabbedMenuBody, TabbedMenuTabLeft, TabbedMenuTabRight, TabbedMenuTabs } from "@/components/TabbedMenu";
 
 const Auth = () => {
   const [loginMenu, setLoginMenu] = useState(true);
@@ -12,17 +13,13 @@ const Auth = () => {
       <Head>
         <title>{loginMenu ? "Login" : "Register"}</title>
       </Head>
-      <div style={{ backgroundColor: "white", borderRadius: "8px" }}>
-        <StyledDiv>
-          <StyledLogin login={!loginMenu} id="LoginBtn" onClick={() => setLoginMenu(true)}>
-            Login
-          </StyledLogin>
-          <StyledRegister login={loginMenu} id="RegisterBtn" onClick={() => setLoginMenu(false)}>
-            Register
-          </StyledRegister>
-        </StyledDiv>
-        <section style={{ padding: "8px 24px 24px 24px" }}>{loginMenu ? <Login /> : <Register />}</section>
-      </div>
+      <TabbedMenu>
+        <TabbedMenuTabs>
+          <TabbedMenuTabLeft text={"Login"} state={!loginMenu} onClick={() => setLoginMenu(true)} />
+          <TabbedMenuTabRight text={"Register"} state={loginMenu} onClick={() => setLoginMenu(false)} />
+        </TabbedMenuTabs>
+        <TabbedMenuBody>{loginMenu ? <Login /> : <Register />}</TabbedMenuBody>
+      </TabbedMenu>
     </>
   );
 };
@@ -60,50 +57,4 @@ export const StyledForm = styled.form`
   display: grid;
   gap: 12px;
   text-align: center;
-`;
-
-const StyledDiv = styled.div`
-  display: flex;
-  height: fit-content;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-`;
-
-const StyledLogin = styled.div<{ login: boolean }>`
-  display: flex;
-  height: 48px;
-  width: 100%;
-  user-select: none;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  ${({ login }) =>
-    login &&
-    `
-    border-top-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    border-top: 4px;
-    border-left: 4px;
-    background-color: #c2c2c2;
-  `}
-`;
-
-const StyledRegister = styled.div<{ login: boolean }>`
-  display: flex;
-  height: 48px;
-  width: 100%;
-  user-select: none;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  ${({ login }) =>
-    login &&
-    `
-    border-top-right-radius: 6px;
-    border-bottom-left-radius: 6px;
-    border-top: 4px;
-    border-right: 4px;
-    background-color: #c2c2c2;
-  `}
 `;
