@@ -28,13 +28,13 @@ export default function Create() {
       <Head>
         <title>Create Todo</title>
       </Head>
-      <Layout>
+      <>
         <Title text="Create a todo!" />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <Input id="Todo" type={"text"} maxlength={200} placeholder="Todo" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTodo(e.target.value)} />
           <Button text="Submit" onClick={() => createTodo({ variables: { userID: session?.user.id, todo } })} disabled={todo.length === 0} />
         </div>
-      </Layout>
+      </>
     </>
   );
 }

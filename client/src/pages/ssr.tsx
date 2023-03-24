@@ -37,14 +37,14 @@ export default function Home(props: { todos: Todo[]; error: string }) {
       <Head>
         <title>NestJS API Demo Frontend with NextJS</title>
       </Head>
-      <Layout>
+      <>
         <Title text="All todos!" />
         <div>
           {props.todos.map((item, index) => (
             <TodoItem key={index} todo={item} />
           ))}
         </div>
-      </Layout>
+      </>
     </>
   );
 }

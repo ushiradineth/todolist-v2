@@ -5,6 +5,7 @@ import GlobalStyled from "@/util/StyledComponents/Global.styled";
 import { SessionProvider } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Layout } from "@/components/Layout";
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const client = getClient();
@@ -13,7 +14,9 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
     <SessionProvider session={session}>
       <ApolloProvider client={client}>
         <GlobalStyled />
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
         <ToastContainer pauseOnFocusLoss={false} newestOnTop />
       </ApolloProvider>
     </SessionProvider>

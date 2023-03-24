@@ -4,8 +4,8 @@ import React from "react";
 
 export default function Custom404() {
   return (
-    <Layout>
+    <>
       <Title text="No page found"></Title>
-    </Layout>
+    </>
   );
 }

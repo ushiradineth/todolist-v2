@@ -9,9 +9,10 @@ import { Container } from "./styles/Container.styled";
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
   const { status } = useSession();
+  const ignoreLinks = ["/404", "/500", "/auth"];
 
   if (status === "loading") return <Spinner />;
-  if (status === "unauthenticated" && router.pathname !== "/404" && router.pathname !== "/500") router.push("/auth");
+  if (status === "unauthenticated" && ignoreLinks.includes(router.pathname)) router.push("/auth");
 
   return (
     <Container>

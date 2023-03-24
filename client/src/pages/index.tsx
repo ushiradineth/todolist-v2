@@ -4,7 +4,7 @@ import { Card } from "@/components/styles/Card.styled";
 import { Container } from "@/components/styles/Container.styled";
 import { StyledLink } from "@/components/styles/Link.styled";
 import Title from "@/components/Title";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -14,13 +14,13 @@ export default function Home() {
       <Head>
         <title>NestJS API Demo Frontend with NextJS</title>
       </Head>
-      <Container>
+      <div style={{ display: "flex", backgroundColor: "#18181b" }}>
         <Actions />
         <Card>
           <Title text="All todos!" />
           <AllTodos />
         </Card>
-      </Container>
+      </div>
     </>
   );
 }
@@ -49,6 +49,7 @@ function Profile() {
     <Card>
       <p>{session?.user.email}</p>
       <Button onClick={() => signOut()} text={"Sign Out"} disabled={false} />
+      <Button onClick={() => signIn()} text={"Sign In"} disabled={false} />
     </Card>
   );
 }

@@ -21,14 +21,14 @@ export default function Search() {
       <Head>
         <title>Search Todo</title>
       </Head>
-      <Layout>
+      <>
         <Title text="Search for a todo!" />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <Input id="ID" type="text" maxlength={50} placeholder="Todo ID" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setID(e.target.value)} />
           <Button text="Search" onClick={() => GetTodo(setResult, setError, id)} disabled={id.length === 0} />
         </div>
         {result && <TodoItem todo={result} key={result._id} />}
-      </Layout>
+      </>
     </>
   );
 }

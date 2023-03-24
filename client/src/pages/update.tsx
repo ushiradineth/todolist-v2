@@ -27,14 +27,14 @@ export default function Create() {
       <Head>
         <title>Update Todo</title>
       </Head>
-      <Layout>
+      <>
         <Title text="Update a todo!" />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <Input id="ID" type="text" maxlength={50} placeholder="Todo ID" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setID(e.target.value)} />
           <Input id="Todo" type="text" maxlength={200} placeholder="Todo" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTodo(e.target.value)} />
           <Button text="Submit" onClick={() => updateTodo({ variables: { id, todo } })} disabled={id.length === 0 || todo.length === 0} />
         </div>
-      </Layout>
+      </>
     </>
   );
 }
