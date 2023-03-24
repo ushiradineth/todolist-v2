@@ -41,6 +41,8 @@ function Actions() {
 }
 
 function Profile() {
+  const { data: session } = useSession();
+
   return (
     <Card>
       <p>{session?.user.email}</p>
