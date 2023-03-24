@@ -2,11 +2,11 @@ version: '3.8'
 services:
   mongodb:
     container_name: mongodb
-    restart: always
+    restart: unless-stopped
     image: mongo:latest
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=ushira
-      - MONGO_INITDB_ROOT_PASSWORD=ushira
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     ports:
       - 27017:27017
 
@@ -15,6 +15,8 @@ services:
     container_name: server
     ports:
       - 3000:3000
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
     depends_on:
       - mongodb
 
@@ -23,5 +25,23 @@ services:
     container_name: client
     ports:
       - 3001:3001
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - API_URL=${API_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - KEYCLOAK_ID=${KEYCLOAK_ID}
+      - KEYCLOAK_SECRET=${KEYCLOAK_SECRET}
+      - KEYCLOAK_ISSUER=${KEYCLOAK_ISSUER}
     depends_on:
       - server
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:21.0.1
+    ports:
+      - 8080:8080
+    environment:
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+    command: 'start-dev'

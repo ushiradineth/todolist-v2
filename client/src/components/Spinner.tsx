@@ -24,9 +24,7 @@ const StyledContainer = styled.div`
 
 const StyledSpinner = styled.svg`
   animation: rotate 2s linear infinite;
-  margin: -25px 0 0 -25px;
-  width: 50px;
-  height: 50px;
+  height: 20px;
 
   & .path {
     stroke: #5652bf;

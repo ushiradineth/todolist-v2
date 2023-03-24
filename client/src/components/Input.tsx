@@ -20,10 +20,20 @@ const StyledInput = styled.input`
   font-size: 20px;
 `;
 
-const Input = (props: { id: string; placeholder: string; type: string; maxlength?: number; minlength?: number; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => {
+interface propType {
+  id: string;
+  register?: any;
+  placeholder: string;
+  type: string;
+  maxlength?: number;
+  minlength?: number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const Input = (props: propType) => {
   return (
     <StyledContainer key={props.id}>
-      <StyledInput autoComplete="off" type={props.type || "text"} id={props.id} name={props.id} onChange={props.onChange} placeholder={props.placeholder} maxLength={props.maxlength || 200} minLength={props.minlength || 1} />
+      <StyledInput onChange={props.onChange} autoComplete="off" type={props.type || "text"} {...props.register} id={props.id} name={props.id} placeholder={props.placeholder} maxLength={props.maxlength || 200} minLength={props.minlength || 1} />
     </StyledContainer>
   );
 };

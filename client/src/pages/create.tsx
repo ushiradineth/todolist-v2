@@ -5,7 +5,6 @@ import Head from "next/head";
 import React from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_TODO } from "@/util/graphql/todo/mutation";
-import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
 import toast from "@/util/Toast";
 import { useSession } from "next-auth/react";
@@ -20,7 +19,6 @@ export default function Create() {
     onCompleted: () => toast("Created Todo", "success"),
   });
 
-  if (loading) return <Spinner />;
   if (error) return <Error error={error.message} />;
 
   return (
@@ -32,7 +30,7 @@ export default function Create() {
         <Title text="Create a todo!" />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <Input id="Todo" type={"text"} maxlength={200} placeholder="Todo" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTodo(e.target.value)} />
-          <Button text="Submit" onClick={() => createTodo({ variables: { userID: session?.user.id, todo } })} disabled={todo.length === 0} />
+          <Button loading={loading} text="Submit" onClick={() => createTodo({ variables: { userID: session?.user.id, todo } })} disabled={todo.length === 0} />
         </div>
       </Card>
     </>

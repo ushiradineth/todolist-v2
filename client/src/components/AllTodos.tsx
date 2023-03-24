@@ -24,7 +24,7 @@ export default function AllTodos() {
         ))}
         {todos.length === 0 && <p>No todos.</p>}
       </div>
-      <Button onClick={() => refetch()} text={"Refetch"} disabled={false} />
+      <Button loading={loading} onClick={() => refetch()} text={"Refetch"} disabled={false} />
     </Card>
   );
 }
