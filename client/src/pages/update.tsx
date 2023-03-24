@@ -8,6 +8,7 @@ import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
 import { UPDATE_TODO } from "@/util/graphql/todo/mutation";
 import toast from "@/util/Toast";
+import { Card } from "@/components/styles/Card.styled";
 
 export default function Create() {
   const [id, setID] = React.useState("");
@@ -26,14 +27,14 @@ export default function Create() {
       <Head>
         <title>Update Todo</title>
       </Head>
-      <>
+      <Card>
         <Title text="Update a todo!" />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <Input id="ID" type="text" maxlength={50} placeholder="Todo ID" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setID(e.target.value)} />
           <Input id="Todo" type="text" maxlength={200} placeholder="Todo" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTodo(e.target.value)} />
           <Button text="Submit" onClick={() => updateTodo({ variables: { id, todo } })} disabled={id.length === 0 || todo.length === 0} />
         </div>
-      </>
+      </Card>
     </>
   );
 }

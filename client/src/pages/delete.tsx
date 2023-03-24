@@ -8,6 +8,7 @@ import { DELETE_TODO } from "@/util/graphql/todo/mutation";
 import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
 import toast from "@/util/Toast";
+import { Card } from "@/components/styles/Card.styled";
 
 export default function Create() {
   const [id, setID] = React.useState("");
@@ -25,13 +26,13 @@ export default function Create() {
       <Head>
         <title>Delete Todo</title>
       </Head>
-      <>
+      <Card>
         <Title text="Delete a todo!" />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <Input id="ID" type="text" maxlength={50} placeholder="Todo ID" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setID(e.target.value)} />
           <Button text="Submit" onClick={() => deleteTodo({ variables: { id } })} disabled={id.length === 0} />
         </div>
-      </>
+      </Card>
     </>
   );
 }

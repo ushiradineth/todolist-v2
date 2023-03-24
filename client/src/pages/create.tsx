@@ -9,6 +9,7 @@ import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
 import toast from "@/util/Toast";
 import { useSession } from "next-auth/react";
+import { Card } from "@/components/styles/Card.styled";
 
 export default function Create() {
   const { data: session } = useSession();
@@ -27,13 +28,13 @@ export default function Create() {
       <Head>
         <title>Create Todo</title>
       </Head>
-      <>
+      <Card>
         <Title text="Create a todo!" />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <Input id="Todo" type={"text"} maxlength={200} placeholder="Todo" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTodo(e.target.value)} />
           <Button text="Submit" onClick={() => createTodo({ variables: { userID: session?.user.id, todo } })} disabled={todo.length === 0} />
         </div>
-      </>
+      </Card>
     </>
   );
 }

@@ -16,10 +16,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   return (
     <Container>
-      <Card>
-        {router.pathname !== "/" && <HomeButton />}
-        {children}
-      </Card>
+      {router.pathname !== "/" && <HomeButton />}
+      {children}
     </Container>
   );
 };
