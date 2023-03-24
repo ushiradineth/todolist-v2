@@ -1,12 +1,10 @@
 import AllTodos from "@/components/AllTodos";
 import Button from "@/components/Button";
 import { Card } from "@/components/styles/Card.styled";
-import { Container } from "@/components/styles/Container.styled";
 import { StyledLink } from "@/components/styles/Link.styled";
 import Title from "@/components/Title";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 export default function Home() {
   return (

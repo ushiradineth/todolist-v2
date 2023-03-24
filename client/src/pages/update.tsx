@@ -6,7 +6,6 @@ import React from "react";
 import { useMutation } from "@apollo/client";
 import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
-import { Layout } from "@/components/Layout";
 import { UPDATE_TODO } from "@/util/graphql/todo/mutation";
 import toast from "@/util/Toast";
 

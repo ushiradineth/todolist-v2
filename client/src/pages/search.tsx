@@ -6,7 +6,6 @@ import React from "react";
 import { GET_TODO_BY_ID } from "@/util/graphql/todo/query";
 import { getClient } from "@/util/apollo-client";
 import { TodoItem } from "@/components/AllTodos";
-import { Layout } from "@/components/Layout";
 import Error from "@/components/Error";
 
 export default function Search() {

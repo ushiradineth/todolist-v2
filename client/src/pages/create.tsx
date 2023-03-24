@@ -7,7 +7,6 @@ import { useMutation } from "@apollo/client";
 import { CREATE_TODO } from "@/util/graphql/todo/mutation";
 import Spinner from "@/components/Spinner";
 import Error from "@/components/Error";
-import { Layout } from "@/components/Layout";
 import toast from "@/util/Toast";
 import { useSession } from "next-auth/react";
 

@@ -10,7 +10,6 @@ import Input from "@/components/Input";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import toast from "@/util/Toast";
-import css from "styled-jsx/css";
 
 const Auth = () => {
   const [loginMenu, setLoginMenu] = useState(true);
