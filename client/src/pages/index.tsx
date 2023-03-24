@@ -45,7 +45,7 @@ function Profile() {
     <Card>
       <p>{session?.user.email}</p>
       <Button onClick={() => signOut()} text={"Sign Out"} disabled={false} />
-      <Button onClick={() => signIn()} text={"Sign In"} disabled={false} />
+      <Button onClick={() => signIn()} text={"Auth testing"} disabled={false} />
     </Card>
   );
 }
