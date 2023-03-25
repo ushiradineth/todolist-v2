@@ -1,14 +1,14 @@
 import toast from "@/util/Toast";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import Button from "../Button";
 import Input from "../Input";
 import * as yup from "yup";
-import { PasswordLog, StyledForm } from "@/pages/auth";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { emailValidator, passwordValidator } from "@/util/validators";
+import { StyledForm } from "../styles/Form.styled";
 
 export const Login = () => {
   const { register, watch } = useForm<InputType>({ resolver: yupResolver(schema) });

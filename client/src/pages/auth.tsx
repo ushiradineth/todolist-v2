@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head.js";
-import styled from "styled-components";
 import { Login } from "@/components/auth/Login";
 import { Register } from "@/components/auth/Registration";
 import { TabbedMenu, TabbedMenuBody, TabbedMenuTabLeft, TabbedMenuTabRight, TabbedMenuTabs } from "@/components/TabbedMenu";
@@ -51,10 +50,3 @@ export const PasswordLog = (props: { password: string }) => {
     </>
   );
 };
-
-export const StyledForm = styled.form`
-  margin-top: 12px;
-  display: grid;
-  gap: 12px;
-  text-align: center;
-`;

@@ -1,4 +1,3 @@
-import { StyledForm } from "@/pages/auth";
 import { CREATE_USER } from "@/util/graphql/user/mutation";
 import toast from "@/util/Toast";
 import { useMutation } from "@apollo/client";
@@ -9,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { emailValidator, nameValidator, passwordValidator } from "@/util/validators";
 import { FormEvent, useState } from "react";
+import { StyledForm } from "../styles/Form.styled";
 
 export const Register = () => {
   const [createUser, { loading }] = useMutation(CREATE_USER, { onError: (e) => toast(e.networkError ? "Error creating User." : "User already exists.", "error"), onCompleted: () => toast("User created!", "success") });
