@@ -2,22 +2,36 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Title from "@/components/Title";
 import Head from "next/head";
-import React from "react";
+import React, { FormEvent, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { DELETE_TODO } from "@/util/graphql/todo/mutation";
-import Error from "@/components/Error";
 import toast from "@/util/Toast";
 import { Card } from "@/components/styles/Card.styled";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { idValidator } from "@/util/validators";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { StyledForm } from "@/components/styles/Form.styled";
 
-export default function Create() {
-  const [id, setID] = React.useState("");
-
-  const [deleteTodo, { data, loading, error }] = useMutation(DELETE_TODO, {
-    onError: (e) => <Error error={e.message} />,
+export default function Delete() {
+  const [error, setError] = useState("");
+  const [deleteTodo, { loading }] = useMutation(DELETE_TODO, {
+    onError: (e) => (e.networkError ? toast("Network Error", "error") : toast("Todo does not exist", "error")),
     onCompleted: () => toast("Deleted Todo", "success"),
   });
+  const { register, watch } = useForm<InputType>({ resolver: yupResolver(schema) });
+  const formData = watch();
 
-  if (error) return <Error error={error.message} />;
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    schema
+      .validate(formData)
+      .then(async (data) => {
+        setError("");
+        deleteTodo({ variables: data });
+      })
+      .catch((err) => error !== err && setError(err.message.toUpperCase()));
+  };
 
   return (
     <>
@@ -25,12 +39,24 @@ export default function Create() {
         <title>Delete Todo</title>
       </Head>
       <Card>
-        <Title text="Delete a todo!" />
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          <Input id="ID" type="text" maxlength={50} placeholder="Todo ID" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setID(e.target.value)} />
-          <Button loading={loading} text="Submit" onClick={() => deleteTodo({ variables: { id } })} disabled={id.length === 0} />
-        </div>
+        <StyledForm onSubmit={(e) => submitHandler(e)}>
+          <Title text="Delete a todo!" />
+          <Input id="id" type="text" placeholder="Todo ID" register={register("id")} />
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <Button loading={loading} text={"Submit"} />
+        </StyledForm>
       </Card>
     </>
   );
 }
+
+type InputType = {
+  id: string;
+};
+
+const schema = yup
+  .object()
+  .shape({
+    id: idValidator,
+  })
+  .required();
