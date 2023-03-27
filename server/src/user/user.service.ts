@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { AuthUserDto } from "./dto/auth-user.dto";
@@ -51,45 +51,41 @@ export class UserService {
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(createUserDto.password, salt);
         createUserDto.password = hash;
-        const createdUser = new this.userModel(createUserDto);
+        const createdUser = await new this.userModel(createUserDto).save();
 
         this.logger.log("Created user id: " + createdUser._id);
-        return createdUser.save();
+        return createdUser;
       }
     } catch (error) {
-      this.logger.error(error);
+      throw new BadRequestException("User not created");
     }
   }
 
   async updateUser(updateUserDto: UpdateUserDto, token: string): Promise<User> {
-    if (!token) throw new Error("Not Authorized");
-    try {
-      if (updateUserDto.password) {
-        const salt = await bcrypt.genSalt();
-        const hash = await bcrypt.hash(updateUserDto.password, salt);
-        updateUserDto.password = hash;
-      }
+    if (updateUserDto.password) {
+      const salt = await bcrypt.genSalt();
+      const hash = await bcrypt.hash(updateUserDto.password, salt);
+      updateUserDto.password = hash;
+    }
 
-      const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
-      const user = await this.userModel.findOne({ _id: jwt.sub });
-      if (!user) throw new Error("User does not exist");
+    const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
+    const user = await this.userModel.findByIdAndUpdate({ _id: jwt.sub }, updateUserDto);
+    if (user) {
       this.logger.log("Updated user id: " + user._id);
-      return this.userModel.findByIdAndUpdate({ _id: user._id }, updateUserDto);
-    } catch (error) {
-      this.logger.log(error.toString());
+      return user;
+    } else {
+      throw new BadRequestException("User does not exist");
     }
   }
 
   async deleteUser(token: string): Promise<User> {
-    try {
-      if (!token) throw new Error("Not Authorized");
-      const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
-      const user = await this.userModel.findOne({ _id: jwt.sub });
-      if (!user) throw new Error("User does not exist");
+    const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
+    const user = await this.userModel.findByIdAndDelete({ _id: jwt.sub });
+    if (user) {
       this.logger.log("Deleted user id: " + user._id);
-      return this.userModel.findByIdAndDelete({ _id: user._id });
-    } catch (error) {
-      this.logger.log(error.toString());
+      return user;
+    } else {
+      throw new BadRequestException("User does not exist");
     }
   }
 

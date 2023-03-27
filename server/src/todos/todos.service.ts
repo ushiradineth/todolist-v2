@@ -1,4 +1,4 @@
-import { Logger, Injectable } from "@nestjs/common";
+import { Logger, Injectable, BadRequestException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UserService } from "src/user/user.service";
@@ -19,7 +19,6 @@ export class TodosService {
   }
 
   getAllTodosByUserID(token: string): Promise<Todo[]> {
-    if (!token) throw new Error("Not Authorized");
     try {
       const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
       this.logger.log("Got all todos by user: " + jwt.sub);
@@ -36,7 +35,6 @@ export class TodosService {
   }
 
   async createTodo(createTodoDto: CreateTodoDto, token: string): Promise<Todo> {
-    if (!token) throw new Error("Not Authorized");
     try {
       const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
       const todo = new this.todoModel({ userID: jwt.sub, todo: createTodoDto.todo });
@@ -49,33 +47,25 @@ export class TodosService {
   }
 
   async updateTodo(updateTodoDto: UpdateTodoDto, token: string): Promise<Todo> {
-    if (!token) throw new Error("Not Authorized");
     try {
       const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
-      const todo = await this.todoModel.findOne({ _id: updateTodoDto.id });
-      if (!todo) throw new Error("Todo does not exist");
-      if (todo.userID === jwt.sub) {
-        this.logger.log("Updated todo id: " + todo._id);
-        return await this.todoModel.findByIdAndUpdate({ _id: updateTodoDto.id }, { todo: updateTodoDto.todo });
-      }
-      throw new Error("Not Authorized");
+      const todo = await this.todoModel.findByIdAndUpdate({ _id: updateTodoDto.id, userID: jwt.sub }, { todo: updateTodoDto.todo });
+      if (!todo) throw new BadRequestException();
+      this.logger.log("Updated todo id: " + todo._id);
+      return todo;
     } catch (error) {
       this.logger.log(error.toString());
     }
   }
 
   async deleteTodo(deleteTodoDto: DeleteTodoDto, token: string): Promise<Todo> {
-    if (!token) throw new Error("Not Authorized");
     try {
       const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
-      const todo = await this.todoModel.findById({ _id: deleteTodoDto.id });
-      if (!todo) throw new Error("Todo does not exist");
-      if (todo.userID === jwt.sub) {
-        this.logger.log("Deleted todo id:" + todo._id);
-        this.userService.unlinkTodo(todo.userID, todo._id);
-        return todo.delete();
-      }
-      throw new Error("Not Authorized");
+      const todo = await this.todoModel.findByIdAndDelete({ _id: deleteTodoDto.id, userID: jwt.sub });
+      if (!todo) throw new BadRequestException();
+      this.userService.unlinkTodo(todo.userID, todo._id);
+      this.logger.log("Deleted todo id:" + todo._id);
+      return todo;
     } catch (error) {
       this.logger.log(error.toString());
     }
