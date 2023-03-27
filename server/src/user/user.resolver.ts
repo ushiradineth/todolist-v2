@@ -1,8 +1,7 @@
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UserService } from "./user.service";
 import { User } from "./user.model";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { DeleteUserDto } from "./dto/delete-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { AuthUserDto } from "./dto/auth-user.dto";
 
@@ -36,12 +35,12 @@ export class UserResolver {
   }
 
   @Mutation(() => User, { name: "DeleteUser" })
-  deleteUser(@Args("UserInput") User: DeleteUserDto) {
-    return this.userService.deleteUser(User);
+  deleteUser(@Context("req") req) {
+    return this.userService.deleteUser(req.headers.authorization);
   }
 
   @Mutation(() => User, { name: "UpdateUser" })
-  updateUser(@Args("UserInput") User: UpdateUserDto) {
-    return this.userService.updateUser(User);
+  updateUser(@Args("UserInput") User: UpdateUserDto, @Context("req") req) {
+    return this.userService.updateUser(User, req.headers.authorization);
   }
 }

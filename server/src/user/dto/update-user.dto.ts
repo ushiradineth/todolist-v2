@@ -4,12 +4,6 @@ import { IsNotEmpty, IsString, ValidateIf } from "class-validator";
 
 @InputType()
 export class UpdateUserDto {
-  @ApiProperty({ description: "ID of the user" })
-  @IsString()
-  @IsNotEmpty()
-  @Field()
-  public id: string;
-
   @ApiProperty({ description: "Email of the user" })
   @ValidateIf((object, value) => value !== null)
   @Field({ nullable: true })
