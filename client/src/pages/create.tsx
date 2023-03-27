@@ -15,14 +15,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { StyledForm } from "@/components/styles/Form.styled";
 
 export default function Create() {
+  const { data: session } = useSession();
   const [error, setError] = useState("");
   const [createTodo, { loading }] = useMutation(CREATE_TODO, {
     onError: (e) => (e.networkError ? toast("Network Error", "error") : toast("Unknown error : " + e.message, "error")),
     onCompleted: () => toast("Created Todo", "success"),
+    context: {
+      headers: {
+        Authorization: `Bearer ${session?.token}`,
+      },
+    },
   });
   const { register, watch } = useForm<InputType>({ resolver: yupResolver(schema) });
   const formData = watch();
-  const { data: session } = useSession();
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +35,7 @@ export default function Create() {
       .validate(formData)
       .then(async (data) => {
         setError("");
-        createTodo({ variables: { userID: session?.user.id, todo: data.text } });
+        createTodo({ variables: { todo: data.text } });
       })
       .catch((err) => error !== err && setError(err.message.toUpperCase()));
   };

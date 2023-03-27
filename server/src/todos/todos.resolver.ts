@@ -1,4 +1,4 @@
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
+import { Args, Context, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
 import { CreateTodoDto } from "./dto/create-todo.dto";
 import { DeleteTodoDto } from "./dto/delete-todo.dto";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
@@ -34,17 +34,17 @@ export class TodosResolver {
   }
 
   @Mutation(() => Todo, { name: "createTodo" })
-  create(@Args("todoInput") todo: CreateTodoDto) {
-    return this.todoService.createTodo(todo);
+  create(@Args("todoInput") todo: CreateTodoDto, @Context("req") req) {
+    return this.todoService.createTodo(todo, req.headers.authorization);
   }
 
   @Mutation(() => Todo, { name: "deleteTodo" })
-  delete(@Args("todoInput") todo: DeleteTodoDto) {
-    return this.todoService.deleteTodo(todo);
+  delete(@Args("todoInput") todo: DeleteTodoDto, @Context("req") req) {
+    return this.todoService.deleteTodo(todo, req.headers.authorization);
   }
 
   @Mutation(() => Todo, { name: "updateTodo" })
-  update(@Args("todoInput") todo: UpdateTodoDto) {
-    return this.todoService.updateTodo(todo);
+  update(@Args("todoInput") todo: UpdateTodoDto, @Context("req") req) {
+    return this.todoService.updateTodo(todo, req.headers.authorization);
   }
 }
