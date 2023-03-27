@@ -18,8 +18,8 @@ export class TodosResolver {
   }
 
   @Query(() => [Todo], { name: "UserTodos" })
-  findAllTodosByUser(@Args("todoInput") id: string) {
-    return this.todoService.getAllTodosByUserID(id);
+  findAllTodosByUser(@Context("req") req) {
+    return this.todoService.getAllTodosByUserID(req.headers.authorization);
   }
 
   @Query(() => Todo, { name: "Todo" })

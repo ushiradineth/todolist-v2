@@ -8,7 +8,13 @@ import { useSession } from "next-auth/react";
 
 export default function AllTodos() {
   const { data: session } = useSession();
-  const { data, loading, error, refetch } = useQuery<{ UserTodos: Todo[] }>(GET_ALL_TODOS_BY_USER, { variables: { id: session?.user.id } });
+  const { data, loading, error, refetch } = useQuery<{ UserTodos: Todo[] }>(GET_ALL_TODOS_BY_USER, {
+    context: {
+      headers: {
+        Authorization: `Bearer ${session?.token}`,
+      },
+    },
+  });
 
   if (loading) return <Spinner noBG />;
   if (error) return <p>{error.message}</p>;

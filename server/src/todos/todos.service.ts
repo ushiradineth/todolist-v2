@@ -18,9 +18,15 @@ export class TodosService {
     return this.todoModel.find().exec();
   }
 
-  getAllTodosByUserID(userID: string): Promise<Todo[]> {
-    this.logger.log("Got all todos by user: " + userID);
-    return this.todoModel.find({ userID }).exec();
+  getAllTodosByUserID(token: string): Promise<Todo[]> {
+    if (!token) throw new Error("Not Authorized");
+    try {
+      const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
+      this.logger.log("Got all todos by user: " + jwt.sub);
+      return this.todoModel.find({ userID: jwt.sub }).exec();
+    } catch (error) {
+      this.logger.log(error.toString());
+    }
   }
 
   async getTodoByID(id: string): Promise<Todo> {

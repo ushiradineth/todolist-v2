@@ -19,8 +19,8 @@ export const GET_ALL_TODOS = gql`
 `;
 
 export const GET_ALL_TODOS_BY_USER = gql`
-  query ($id: String!) {
-    UserTodos(todoInput: $id) {
+  query {
+    UserTodos {
       _id
       userID
       todo

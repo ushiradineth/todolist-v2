@@ -18,7 +18,7 @@ type Todo {
 
 type Query {
   Todos: [Todo!]!
-  UserTodos(todoInput: String!): [Todo!]!
+  UserTodos: [Todo!]!
   Todo(todoInput: String!): Todo!
   Users: [User!]!
   User(UserInput: String!): User!

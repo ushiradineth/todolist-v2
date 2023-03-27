@@ -14,7 +14,14 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { req } = ctx;
   const session = await getSession({ req });
   try {
-    const { data } = await client.query({ query: GET_ALL_TODOS_BY_USER, variables: { id: session?.user.id } });
+    const { data } = await client.query({
+      query: GET_ALL_TODOS_BY_USER,
+      context: {
+        headers: {
+          Authorization: `Bearer ${session?.token}`,
+        },
+      },
+    });
     return {
       props: {
         todos: data.UserTodos as Todo[],
@@ -43,6 +50,7 @@ export default function Home(props: { todos: Todo[]; error: string }) {
           {props.todos.map((item, index) => (
             <TodoItem key={index} todo={item} />
           ))}
+          {props.todos.length === 0 && <p>No todos.</p>}
         </div>
       </Card>
     </>
