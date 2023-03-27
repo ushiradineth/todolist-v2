@@ -11,8 +11,8 @@ export const CREATE_USER = gql`
 `;
 
 export const DELETE_USER = gql`
-  mutation ($id: String!) {
-    DeleteUser() {
+  mutation {
+    DeleteUser {
       _id
       email
       name

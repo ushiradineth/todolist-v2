@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_TODO = gql`
-  mutation ($userID: String!, $todo: String!) {
+  mutation ($todo: String!) {
     createTodo(todoInput: { todo: $todo }) {
       todo: todo
     }
