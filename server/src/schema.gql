@@ -36,12 +36,11 @@ type Mutation {
   deleteTodo(todoInput: DeleteTodoDto!): Todo!
   updateTodo(todoInput: UpdateTodoDto!): Todo!
   CreateUser(UserInput: CreateUserDto!): User!
-  DeleteUser(UserInput: DeleteUserDto!): User!
+  DeleteUser: User!
   UpdateUser(UserInput: UpdateUserDto!): User!
 }
 
 input CreateTodoDto {
-  userID: String!
   todo: String!
 }
 
@@ -60,12 +59,7 @@ input CreateUserDto {
   password: String!
 }
 
-input DeleteUserDto {
-  id: String!
-}
-
 input UpdateUserDto {
-  id: String!
   email: String
   name: String
   password: String
