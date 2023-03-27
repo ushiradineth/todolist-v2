@@ -1,22 +1,21 @@
-import NextAuth, { type NextAuthOptions } from "next-auth";
+import NextAuth, { type Session, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import { getClient } from "@/util/apollo-client";
 import { AUTHENTICATE_USER } from "@/util/graphql/user/query";
+import { type JWT } from "next-auth/jwt";
+import jsonwebtoken from "jsonwebtoken";
 
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
   callbacks: {
-    session({ session, token }) {
-      session.user = {
-        id: token.sub,
-        email: token.email,
-        name: token.name,
-      };
+    session(params: { session: Session; token: JWT }) {
+      const encodedToken = jsonwebtoken.sign(params.token, process.env.NEXTAUTH_SECRET || "");
+      params.session.token = encodedToken;
 
-      return session;
+      return params.session;
     },
   },
   providers: [
