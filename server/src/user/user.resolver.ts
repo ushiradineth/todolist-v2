@@ -4,6 +4,8 @@ import { User } from "./user.model";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { AuthUserDto } from "./dto/auth-user.dto";
+import { UseGuards } from "@nestjs/common/decorators";
+import { GqlAuthGuard } from "src/user.guard";
 
 @Resolver(() => User)
 export class UserResolver {
@@ -34,11 +36,13 @@ export class UserResolver {
     return this.userService.createUser(User);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => User, { name: "DeleteUser" })
   deleteUser(@Context("req") req) {
     return this.userService.deleteUser(req.headers.authorization);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => User, { name: "UpdateUser" })
   updateUser(@Args("UserInput") User: UpdateUserDto, @Context("req") req) {
     return this.userService.updateUser(User, req.headers.authorization);
