@@ -15,6 +15,9 @@ import { UserModule } from "./user/user.module";
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), "src/schema.gql"),
+      context: ({ req }) => {
+        return { request: req };
+      },
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -23,7 +26,7 @@ import { UserModule } from "./user/user.module";
         uri: config.get<string>("MONGODB_URI"),
       }),
     }),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ envFilePath: `.env` }),
     HealthModule,
   ],
   controllers: [],
