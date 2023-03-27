@@ -17,9 +17,9 @@ const Spinner = (props: { noBG?: boolean }) =>
 const StyledContainer = styled.div`
   display: flex;
   height: 100vh;
+  width: 100vh;
   align-items: center;
   justify-content: center;
-  background-color: #3f3f46;
 `;
 
 const StyledSpinner = styled.svg`

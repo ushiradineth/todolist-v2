@@ -1,5 +1,6 @@
 import AllTodos from "@/components/AllTodos";
 import Button from "@/components/Button";
+import Spinner from "@/components/Spinner";
 import { Card } from "@/components/styles/Card.styled";
 import { StyledLink } from "@/components/styles/Link.styled";
 import Title from "@/components/Title";
@@ -7,6 +8,10 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 
 export default function Home() {
+  const { status } = useSession();
+
+  if (status !== "authenticated") return <Spinner />;
+
   return (
     <>
       <Head>
