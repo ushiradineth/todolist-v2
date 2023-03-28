@@ -1,14 +1,18 @@
 import { GET_ALL_TODOS_BY_USER } from "@/util/graphql/todo/query";
 import { useMutation, useQuery } from "@apollo/client";
-import React, { useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import Spinner from "./Spinner";
 import Button from "./Button";
 import { Card } from "./styles/Card.styled";
 import { DELETE_TODO, UPDATE_TODO } from "@/util/graphql/todo/mutation";
 import toast from "@/util/Toast";
-import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import Input from "./Input";
 import { IoMdSend } from "react-icons/io";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { textValidator } from "@/util/validators";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
 
 export default function AllTodos() {
   const { data, loading, error, refetch } = useQuery<{ UserTodos: Todo[] }>(GET_ALL_TODOS_BY_USER);
@@ -32,8 +36,9 @@ export default function AllTodos() {
 }
 
 export function TodoItem(props: { todo: Todo; refetch: () => any }) {
+  const { register, watch } = useForm<{ text: string }>({ resolver: yupResolver(schema) });
+  const formData = watch();
   const [edit, setEdit] = useState(false);
-  const [text, setText] = useState("");
   const [deleteTodo, { loading: loadingDelete }] = useMutation(DELETE_TODO, {
     onError: (e) => (e.networkError ? toast("Network Error", "error") : toast("Todo does not exist", "error")),
     onCompleted: () => {
@@ -49,31 +54,42 @@ export function TodoItem(props: { todo: Todo; refetch: () => any }) {
     },
   });
 
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    schema
+      .validate(formData)
+      .then(async (data) => {
+        updateTodo({ variables: { id: props.todo._id, todo: data.text } });
+      })
+      .catch();
+  };
+
   return (
     <div style={{ display: "flex", gap: "20px", justifyContent: "center" }}>
       {edit ? (
-        <div style={{ display: "flex", gap: "20px", justifyContent: "center", alignItems: "center" }}>
+        <form onSubmit={(e) => submitHandler(e)} style={{ display: "flex", gap: "20px", justifyContent: "center", alignItems: "center" }}>
           <Input
-            id={props.todo._id}
+            id="text"
+            type="text"
+            placeholder="text"
             style={{ width: 200 }}
             cStyle={{ marginTop: 8 }}
-            placeholder={"Text"}
-            onChange={(e) => setText(e.target.value)}
+            register={register("text")}
             defaultValue={props.todo.todo}
             action={
-              <button style={{ all: "unset", fontSize: 20, marginTop: 6, cursor: "pointer" }} onClick={() => setEdit(false)}>
+              <button type="button" style={{ all: "unset", fontSize: 20, marginTop: 6, cursor: "pointer" }} onClick={() => setEdit(false)}>
                 <AiOutlineClose color="white" />
               </button>
             }
           />
-          <Button text={<IoMdSend />} loading={loadingUpdate} onClick={() => updateTodo({ variables: { id: props.todo._id, todo: text } })} />
-        </div>
+          <Button text={<IoMdSend />} loading={loadingUpdate} />
+        </form>
       ) : (
         <div style={{ display: "flex", gap: 12 }}>
-          <button style={{ all: "unset", fontSize: 20, marginTop: 6, cursor: "pointer" }} onClick={() => deleteTodo({ variables: { id: props.todo._id } })}>
+          <button type="button" style={{ all: "unset", fontSize: 20, marginTop: 6, cursor: "pointer" }} onClick={() => deleteTodo({ variables: { id: props.todo._id } })}>
             {loadingDelete ? <Spinner noBG /> : <AiOutlineClose />}
           </button>
-          <button style={{ all: "unset", fontSize: 20, cursor: "pointer" }} onClick={() => setEdit(!edit)}>
+          <button type="button" style={{ all: "unset", fontSize: 20, cursor: "pointer" }} onClick={() => setEdit(!edit)}>
             {props.todo.todo}
           </button>
         </div>
@@ -81,3 +97,10 @@ export function TodoItem(props: { todo: Todo; refetch: () => any }) {
     </div>
   );
 }
+
+const schema = yup
+  .object()
+  .shape({
+    text: textValidator,
+  })
+  .required();
