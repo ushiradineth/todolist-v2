@@ -30,18 +30,6 @@ export class UserService {
     return res;
   }
 
-  async Authenticate(authUserDto: AuthUserDto): Promise<User | null> {
-    const user: User = await this.userModel.findOne({ email: authUserDto.email });
-    const result = await bcrypt.compare(authUserDto.password, user.password);
-
-    if (result) {
-      this.logger.log("Authenticated user: " + user.email);
-      return user;
-    } else {
-      return null;
-    }
-  }
-
   async createUser(createUserDto: CreateUserDto): Promise<User | Error> {
     try {
       const doesUserExist = await this.userModel.findOne({ email: createUserDto.email });

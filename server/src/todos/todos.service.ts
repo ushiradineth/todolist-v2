@@ -1,4 +1,4 @@
-import { Logger, Injectable, BadRequestException } from "@nestjs/common";
+import { Logger, Injectable, BadRequestException, UseGuards } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UserService } from "src/user/user.service";
@@ -7,6 +7,7 @@ import { DeleteTodoDto } from "./dto/delete-todo.dto";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
 import { Todo, TodoDocument } from "./todos.model";
 import { JwtService } from "@nestjs/jwt";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 @Injectable()
 export class TodosService {
@@ -18,6 +19,7 @@ export class TodosService {
     return this.todoModel.find().exec();
   }
 
+  @UseGuards(JwtAuthGuard)
   getAllTodosByUserID(token: string): Promise<Todo[]> {
     try {
       const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
@@ -34,6 +36,7 @@ export class TodosService {
     return res;
   }
 
+  @UseGuards(JwtAuthGuard)
   async createTodo(createTodoDto: CreateTodoDto, token: string): Promise<Todo> {
     try {
       const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
@@ -46,10 +49,11 @@ export class TodosService {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   async updateTodo(updateTodoDto: UpdateTodoDto, token: string): Promise<Todo> {
     try {
       const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
-      const todo = await this.todoModel.findByIdAndUpdate({ _id: updateTodoDto.id, userID: jwt.sub }, { todo: updateTodoDto.todo });
+      const todo = await this.todoModel.findOneAndUpdate({ _id: updateTodoDto.id, userID: jwt.sub }, { todo: updateTodoDto.todo });
       if (!todo) throw new BadRequestException();
       this.logger.log("Updated todo id: " + todo._id);
       return todo;
@@ -58,10 +62,12 @@ export class TodosService {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   async deleteTodo(deleteTodoDto: DeleteTodoDto, token: string): Promise<Todo> {
     try {
       const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
-      const todo = await this.todoModel.findByIdAndDelete({ _id: deleteTodoDto.id, userID: jwt.sub });
+
+      const todo = await this.todoModel.findOneAndDelete({ _id: deleteTodoDto.id, userID: jwt.sub });
       if (!todo) throw new BadRequestException();
       this.userService.unlinkTodo(todo.userID, todo._id);
       this.logger.log("Deleted todo id:" + todo._id);
