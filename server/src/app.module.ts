@@ -7,6 +7,7 @@ import { TodosModule } from "./todos/todos.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { HealthModule } from "./health/health.module";
 import { UserModule } from "./user/user.module";
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserModule } from "./user/user.module";
     }),
     ConfigModule.forRoot({ envFilePath: `.env` }),
     HealthModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

@@ -6,7 +6,7 @@ import { Todo } from "./todos.model";
 import { TodosService } from "./todos.service";
 import { v4 as uuid } from "uuid";
 import { Logger, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "src/user.guard";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 @Resolver(() => Todo)
 export class TodosResolver {
@@ -18,7 +18,7 @@ export class TodosResolver {
     return this.todoService.getAllTodos();
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Query(() => [Todo], { name: "UserTodos" })
   findAllTodosByUser(@Context("req") req) {
     return this.todoService.getAllTodosByUserID(req.headers.authorization);
@@ -35,19 +35,19 @@ export class TodosResolver {
     return uuid();
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => Todo, { name: "createTodo" })
   create(@Args("todoInput") todo: CreateTodoDto, @Context("req") req) {
     return this.todoService.createTodo(todo, req.headers.authorization);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => Todo, { name: "deleteTodo" })
   delete(@Args("todoInput") todo: DeleteTodoDto, @Context("req") req) {
     return this.todoService.deleteTodo(todo, req.headers.authorization);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => Todo, { name: "updateTodo" })
   update(@Args("todoInput") todo: UpdateTodoDto, @Context("req") req) {
     return this.todoService.updateTodo(todo, req.headers.authorization);
