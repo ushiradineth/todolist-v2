@@ -1,17 +1,17 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import styled from "styled-components";
 import Spinner from "./Spinner";
 
 interface propType {
   loading?: boolean;
   onClick?: (arg0: any) => void;
-  text: string;
+  text: string | ReactNode;
   disabled?: boolean;
 }
 
 export default function Button(props: propType) {
   return (
-    <StyledButton id={props.text} disabled={props.disabled} type={"submit"} onClick={props.onClick}>
+    <StyledButton id={typeof props.text === "string" ? props.text : "id"} disabled={props.disabled} type={"submit"} onClick={props.onClick}>
       {props.loading ? <Spinner noBG /> : props.text}
     </StyledButton>
   );
