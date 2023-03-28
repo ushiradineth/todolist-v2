@@ -6,7 +6,6 @@ import React, { FormEvent, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_TODO } from "@/util/graphql/todo/mutation";
 import toast from "@/util/Toast";
-import { useSession } from "next-auth/react";
 import { Card } from "@/components/styles/Card.styled";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -15,16 +14,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { StyledForm } from "@/components/styles/Form.styled";
 
 export default function Create() {
-  const { data: session } = useSession();
   const [error, setError] = useState("");
   const [createTodo, { loading }] = useMutation(CREATE_TODO, {
     onError: (e) => (e.networkError ? toast("Network Error", "error") : toast("Unknown error : " + e.message, "error")),
     onCompleted: () => toast("Created Todo", "success"),
-    context: {
-      headers: {
-        Authorization: `Bearer ${session?.token}`,
-      },
-    },
   });
   const { register, watch } = useForm<InputType>({ resolver: yupResolver(schema) });
   const formData = watch();

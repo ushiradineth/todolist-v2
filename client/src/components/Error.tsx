@@ -1,7 +1,6 @@
 import Head from "next/head";
 import styled from "styled-components";
 import HomeButton from "./HomeButton";
-import { Layout } from "./Layout";
 
 const StyledContainer = styled.div`
   display: flex;

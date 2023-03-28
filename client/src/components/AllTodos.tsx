@@ -4,17 +4,9 @@ import React from "react";
 import Spinner from "./Spinner";
 import Button from "./Button";
 import { Card } from "./styles/Card.styled";
-import { useSession } from "next-auth/react";
 
 export default function AllTodos() {
-  const { data: session } = useSession();
-  const { data, loading, error, refetch } = useQuery<{ UserTodos: Todo[] }>(GET_ALL_TODOS_BY_USER, {
-    context: {
-      headers: {
-        Authorization: `Bearer ${session?.token}`,
-      },
-    },
-  });
+  const { data, loading, error, refetch } = useQuery<{ UserTodos: Todo[] }>(GET_ALL_TODOS_BY_USER);
 
   if (loading) return <Spinner noBG />;
   if (error) return <p>{error.message}</p>;
@@ -38,7 +30,6 @@ export default function AllTodos() {
 export function TodoItem(props: { todo: Todo }) {
   return (
     <div>
-      {/* <p style={{ fontSize: "20px" }}>{props.todo._id}</p> */}
       <p style={{ fontSize: "20px" }}>{props.todo.todo}</p>
     </div>
   );

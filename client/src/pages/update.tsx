@@ -12,19 +12,12 @@ import { idValidator, textValidator } from "@/util/validators";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { StyledForm } from "@/components/styles/Form.styled";
 import { UPDATE_TODO } from "@/util/graphql/todo/mutation";
-import { useSession } from "next-auth/react";
 
 export default function Update() {
   const [error, setError] = useState("");
-  const { data: session } = useSession();
   const [updateTodo, { loading }] = useMutation(UPDATE_TODO, {
     onError: (e) => (e.networkError ? toast("Network Error", "error") : toast("Todo does not exist", "error")),
     onCompleted: () => toast("Updated Todo", "success"),
-    context: {
-      headers: {
-        Authorization: `Bearer ${session?.token}`,
-      },
-    },
   });
   const { register, watch } = useForm<InputType>({ resolver: yupResolver(schema) });
   const formData = watch();

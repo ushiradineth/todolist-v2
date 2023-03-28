@@ -12,19 +12,12 @@ import * as yup from "yup";
 import { idValidator } from "@/util/validators";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { StyledForm } from "@/components/styles/Form.styled";
-import { useSession } from "next-auth/react";
 
 export default function Delete() {
   const [error, setError] = useState("");
-  const { data: session } = useSession();
   const [deleteTodo, { loading }] = useMutation(DELETE_TODO, {
     onError: (e) => (e.networkError ? toast("Network Error", "error") : toast("Todo does not exist", "error")),
     onCompleted: () => toast("Deleted Todo", "success"),
-    context: {
-      headers: {
-        Authorization: `Bearer ${session?.token}`,
-      },
-    },
   });
   const { register, watch } = useForm<InputType>({ resolver: yupResolver(schema) });
   const formData = watch();
