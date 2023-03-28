@@ -21,7 +21,7 @@ export default function AllTodos() {
 
   return (
     <Card>
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "start" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
         {todos.map((item, index) => (
           <TodoItem key={index} todo={item} refetch={refetch} />
         ))}
@@ -38,7 +38,6 @@ export function TodoItem(props: { todo: Todo; refetch: () => any }) {
     onError: (e) => (e.networkError ? toast("Network Error", "error") : toast("Todo does not exist", "error")),
     onCompleted: () => {
       props.refetch();
-      toast("Deleted Todo", "success");
     },
   });
 
@@ -46,7 +45,6 @@ export function TodoItem(props: { todo: Todo; refetch: () => any }) {
     onError: (e) => (e.networkError ? toast("Network Error", "error") : toast("Todo does not exist", "error")),
     onCompleted: () => {
       props.refetch();
-      toast("Updated Todo", "success");
       setEdit(false);
     },
   });
@@ -71,12 +69,14 @@ export function TodoItem(props: { todo: Todo; refetch: () => any }) {
           <Button text={<IoMdSend />} loading={loadingUpdate} onClick={() => updateTodo({ variables: { id: props.todo._id, todo: text } })} />
         </div>
       ) : (
-        <>
-          <button style={{ all: "unset", fontSize: 20, marginTop: 8, cursor: "pointer" }} onClick={() => setEdit(!edit)}>
+        <div style={{ display: "flex", gap: 12 }}>
+          <button style={{ all: "unset", fontSize: 20, marginTop: 6, cursor: "pointer" }} onClick={() => deleteTodo({ variables: { id: props.todo._id } })}>
+            {loadingDelete ? <Spinner noBG /> : <AiOutlineClose />}
+          </button>
+          <button style={{ all: "unset", fontSize: 20, cursor: "pointer" }} onClick={() => setEdit(!edit)}>
             {props.todo.todo}
           </button>
-          <Button text={<AiFillDelete />} loading={loadingDelete} onClick={() => deleteTodo({ variables: { id: props.todo._id } })} />
-        </>
+        </div>
       )}
     </div>
   );
