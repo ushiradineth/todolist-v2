@@ -6,7 +6,7 @@ import Button from "./Button";
 import { Card } from "./styles/Card.styled";
 import { DELETE_TODO, UPDATE_TODO } from "@/util/graphql/todo/mutation";
 import toast from "@/util/Toast";
-import { AiFillDelete, AiFillEdit, AiOutlineClose } from "react-icons/ai";
+import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
 import Input from "./Input";
 import { IoMdSend } from "react-icons/io";
 
@@ -27,7 +27,6 @@ export default function AllTodos() {
         ))}
         {todos.length === 0 && <p>No todos.</p>}
       </div>
-      <Button loading={loading} onClick={() => refetch()} text={"Refetch"} disabled={false} />
     </Card>
   );
 }
