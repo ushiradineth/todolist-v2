@@ -7,11 +7,12 @@ interface propType {
   onClick?: (arg0: any) => void;
   text: string | ReactNode;
   disabled?: boolean;
+  type?: "submit" | "button";
 }
 
 export default function Button(props: propType) {
   return (
-    <StyledButton id={typeof props.text === "string" ? props.text : "id"} disabled={props.disabled} type={"submit"} onClick={props.onClick}>
+    <StyledButton id={typeof props.text === "string" ? props.text : "id"} disabled={props.disabled} type={props.type ? props.type : "submit"} onClick={props.onClick}>
       {props.loading ? <Spinner noBG /> : props.text}
     </StyledButton>
   );

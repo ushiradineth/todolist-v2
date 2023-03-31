@@ -39,6 +39,8 @@ export const Login = () => {
       {/* <PasswordLog password={formData.password || "error"} /> */}
       {error && <p style={{ color: "red" }}>{error}</p>}
       <Button loading={loading} text={"Login"} />
+
+      <Button type="button" onClick={() => signIn("keycloak")} text={"Sign in with Keycloak"} disabled={false} />
     </StyledForm>
   );
 };

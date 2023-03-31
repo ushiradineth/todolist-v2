@@ -7,6 +7,7 @@ import { type JWT } from "next-auth/jwt";
 import jsonwebtoken from "jsonwebtoken";
 
 export const authOptions: NextAuthOptions = {
+  debug: true,
   session: {
     strategy: "jwt",
   },
@@ -23,6 +24,8 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.KEYCLOAK_ID!,
       clientSecret: process.env.KEYCLOAK_SECRET!,
       issuer: process.env.KEYCLOAK_ISSUER,
+      authorization: process.env.KEYCLOAK_AUTHORIZATION,
+      wellKnown: `${process.env.KEYCLOAK_ISSUER}/.well-known/openid-configuration`,
     }),
     CredentialsProvider({
       name: "Credentials",
