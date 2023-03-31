@@ -3,9 +3,17 @@ import Head from "next/head.js";
 import { Login } from "@/components/auth/Login";
 import { Register } from "@/components/auth/Registration";
 import { TabbedMenu, TabbedMenuBody, TabbedMenuTabLeft, TabbedMenuTabRight, TabbedMenuTabs } from "@/components/TabbedMenu";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import Spinner from "@/components/Spinner";
 
 const Auth = () => {
   const [loginMenu, setLoginMenu] = useState(true);
+  const { status } = useSession();
+  const router = useRouter();
+
+  if (status === "loading") return <Spinner />;
+  if (status === "authenticated") router.push("/");
 
   return (
     <>

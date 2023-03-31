@@ -49,7 +49,15 @@ function Profile() {
   return (
     <Card>
       <p>{session?.user?.email}</p>
-      <Button onClick={() => signOut()} text={"Sign Out"} disabled={false} />
+      <Button
+        onClick={() =>
+          signOut({
+            callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_ISSUER}/protocol/openid-connect/logout`,
+          })
+        }
+        text={"Sign Out"}
+        disabled={false}
+      />
     </Card>
   );
 }

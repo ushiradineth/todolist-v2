@@ -36,11 +36,9 @@ export const Login = () => {
     <StyledForm onSubmit={(e) => submitHandler(e)}>
       <Input id="email" type="email" placeholder="Email" register={register("email")} />
       <Input id="password" type="password" placeholder="Password" register={register("password")} />
-      {/* <PasswordLog password={formData.password || "error"} /> */}
       {error && <p style={{ color: "red" }}>{error}</p>}
       <Button loading={loading} text={"Login"} />
-
-      <Button type="button" onClick={() => signIn("keycloak")} text={"Sign in with Keycloak"} disabled={false} />
+      <Button type="button" onClick={() => signIn("keycloak", { callbackUrl: "/" })} text={"Sign in with Keycloak"} disabled={false} />
     </StyledForm>
   );
 };

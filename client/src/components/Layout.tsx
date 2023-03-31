@@ -14,7 +14,6 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   if (status === "loading") return <Spinner />;
   if (status === "unauthenticated" && !publicURLs.includes(router.pathname)) router.push("/auth");
-  if (status === "authenticated") router.push("/");
 
   return (
     <ApolloProvider client={getClient(session?.token)}>
