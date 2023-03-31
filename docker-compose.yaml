@@ -17,6 +17,7 @@ services:
       - 3000:3000
     environment:
       - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mongodb
 
@@ -29,12 +30,16 @@ services:
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
       - API_URL=${API_URL}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXT_PUBLIC_FE=${NEXT_PUBLIC_FE}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_PUBLIC_AUTH_ISSUER=${NEXT_PUBLIC_AUTH_ISSUER}
       - KEYCLOAK_ID=${KEYCLOAK_ID}
       - KEYCLOAK_SECRET=${KEYCLOAK_SECRET}
       - KEYCLOAK_ISSUER=${KEYCLOAK_ISSUER}
+      - KEYCLOAK_AUTHORIZATION=${KEYCLOAK_AUTHORIZATION}
     depends_on:
       - server
+      - keycloak
 
   keycloak:
     container_name: keycloak
@@ -45,3 +50,5 @@ services:
       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
     command: 'start-dev'
+    depends_on:
+      - server
