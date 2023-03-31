@@ -35,21 +35,21 @@ export default function AllTodos() {
   );
 }
 
-export function TodoItem(props: { todo: Todo; refetch: () => any }) {
+export function TodoItem(props: { todo: Todo; refetch?: () => any }) {
   const { register, watch } = useForm<{ text: string }>({ resolver: yupResolver(schema) });
   const formData = watch();
   const [edit, setEdit] = useState(false);
   const [deleteTodo, { loading: loadingDelete }] = useMutation(DELETE_TODO, {
     onError: (e) => (e.networkError ? toast("Network Error", "error") : toast("Todo does not exist", "error")),
     onCompleted: () => {
-      props.refetch();
+      props.refetch && props.refetch();
     },
   });
 
   const [updateTodo, { loading: loadingUpdate }] = useMutation(UPDATE_TODO, {
     onError: (e) => (e.networkError ? toast("Network Error", "error") : toast("Todo does not exist", "error")),
     onCompleted: () => {
-      props.refetch();
+      props.refetch && props.refetch();
       setEdit(false);
     },
   });
