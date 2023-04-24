@@ -1,13 +1,14 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { HydratedDocument } from "mongoose";
+import mongoose, { HydratedDocument } from "mongoose";
+import { User } from "src/user/user.model";
 
 export type TodoDocument = HydratedDocument<Todo>;
 
-@Schema()
+@Schema({ toJSON: { virtuals: true }, toObject: { virtuals: true } })
 @ObjectType()
-export class Todo {
+export class Todo  {
   @ApiProperty()
   @Field()
   _id: string;
@@ -21,6 +22,17 @@ export class Todo {
   @Field()
   @Prop()
   todo: string;
+
+  @ApiProperty()
+  @Field()
+  user: User;
 }
 
 export const TodoSchema = SchemaFactory.createForClass(Todo);
+
+TodoSchema.virtual('user', {
+  ref: 'User',
+  localField: 'userID',
+  foreignField: '_id',
+  justOne: true
+});

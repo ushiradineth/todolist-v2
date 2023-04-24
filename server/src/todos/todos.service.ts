@@ -31,7 +31,9 @@ export class TodosService {
   }
 
   async getTodoByID(id: string): Promise<Todo> {
-    const res: Todo = await this.todoModel.findById(id);
+    const res: Todo = await this.todoModel
+      .findById(id)
+      .populate('user');
     this.logger.log("Got todo id:" + res._id);
     return res;
   }

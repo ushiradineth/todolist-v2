@@ -13,6 +13,7 @@ type Todo {
   _id: String!
   userID: String!
   todo: String!
+  user: User!
   uuid: String!
 }
 
