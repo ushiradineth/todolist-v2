@@ -1,4 +1,3 @@
-import { CREATE_USER } from "@/util/graphql/user/mutation";
 import toast from "@/util/Toast";
 import { useMutation } from "@apollo/client";
 import Button from "../Button";
@@ -11,7 +10,7 @@ import { FormEvent, useState } from "react";
 import { StyledForm } from "../styles/Form.styled";
 
 export const Register = () => {
-  const [createUser, { loading }] = useMutation(CREATE_USER, { onError: (e) => toast(e.networkError ? "Error creating User." : "User already exists.", "error"), onCompleted: () => toast("User created!", "success") });
+  // const [createUser, { loading }] = useMutation(CREATE_USER, { onError: (e) => toast(e.networkError ? "Error creating User." : "User already exists.", "error"), onCompleted: () => toast("User created!", "success") });
 
   const { register, watch } = useForm<InputType>({ resolver: yupResolver(schema) });
   const formData = watch();
@@ -23,7 +22,7 @@ export const Register = () => {
       .validate(formData)
       .then(async (data) => {
         setError("");
-        createUser({ variables: data });
+        // createUser({ variables: data });
       })
       .catch((err) => error !== err && setError(err.message.toUpperCase()));
   };
@@ -35,7 +34,7 @@ export const Register = () => {
       <Input id="password" type="password" placeholder="Password" register={register("password")} />
       {/* <PasswordLog password={formData.password || ""} /> */}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <Button loading={loading} text={"Register"} />
+      {/* <Button loading={loading} text={"Register"} /> */}
     </StyledForm>
   );
 };

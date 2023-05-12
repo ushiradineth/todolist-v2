@@ -1,12 +1,10 @@
-import { Args, Context, Mutation, Query, ResolveField, Resolver } from "@nestjs/graphql";
-import { CreateTodoDto } from "./dto/create-todo.dto";
-import { DeleteTodoDto } from "./dto/delete-todo.dto";
+import { Args, Mutation, Query, ResolveField, Resolver } from "@nestjs/graphql";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
 import { Todo } from "./todos.model";
 import { TodosService } from "./todos.service";
 import { v4 as uuid } from "uuid";
-import { Logger, UseGuards } from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { Logger } from "@nestjs/common";
+import { AuthenticatedUser } from "nest-keycloak-connect";
 
 @Resolver(() => Todo)
 export class TodosResolver {
@@ -14,19 +12,18 @@ export class TodosResolver {
   private readonly logger = new Logger(TodosService.name);
 
   @Query(() => [Todo], { name: "Todos" })
-  findAll() {
-    return this.todoService.getAllTodos();
+  Todos() {
+    return this.todoService.Todos();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Query(() => [Todo], { name: "UserTodos" })
-  findAllTodosByUser(@Context("req") req) {
-    return this.todoService.getAllTodosByUserID(req.headers.authorization);
+  UserTodos(@AuthenticatedUser() user: AuthenticatedUser) {
+    return this.todoService.UserTodos(user);
   }
 
   @Query(() => Todo, { name: "Todo" })
-  findOne(@Args("todoInput") id: string) {
-    return this.todoService.getTodoByID(id);
+  Todo(@Args("id") id: string) {
+    return this.todoService.Todo(id);
   }
 
   @ResolveField(() => String)
@@ -35,21 +32,19 @@ export class TodosResolver {
     return uuid();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Mutation(() => Todo, { name: "createTodo" })
-  create(@Args("todoInput") todo: CreateTodoDto, @Context("req") req) {
-    return this.todoService.createTodo(todo, req.headers.authorization);
+  createTodo(@Args("todo") todo: string, @AuthenticatedUser() user: AuthenticatedUser) {
+    const text = todo;
+    return this.todoService.createTodo(text, user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Mutation(() => Todo, { name: "deleteTodo" })
-  delete(@Args("todoInput") todo: DeleteTodoDto, @Context("req") req) {
-    return this.todoService.deleteTodo(todo, req.headers.authorization);
+  deleteTodo(@Args("id") id: string, @AuthenticatedUser() user: AuthenticatedUser) {
+    return this.todoService.deleteTodo(id, user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Mutation(() => Todo, { name: "updateTodo" })
-  update(@Args("todoInput") todo: UpdateTodoDto, @Context("req") req) {
-    return this.todoService.updateTodo(todo, req.headers.authorization);
+  updateTodo(@Args("todoInput") todo: UpdateTodoDto, @AuthenticatedUser() user: AuthenticatedUser) {
+    return this.todoService.updateTodo(todo, user);
   }
 }

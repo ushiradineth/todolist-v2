@@ -24,7 +24,7 @@ export const Login = () => {
       .then(async (data) => {
         setError("");
         setLoading(true);
-        const login = await signIn("credentials", { email: data.email, password: data.password, callbackUrl: "/", redirect: false });
+        const login = await signIn("keycloak", { email: data.email, password: data.password });
         login?.status === 401 ? toast("Invalid Credentials", "warning") : login?.error && toast(login?.error, "error");
         setLoading(false);
         login?.ok && router.push("/");

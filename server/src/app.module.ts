@@ -7,7 +7,10 @@ import { TodosModule } from "./todos/todos.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { HealthModule } from "./health/health.module";
 import { UserModule } from "./user/user.module";
-import { AuthModule } from './auth/auth.module';
+import { AuthGuard, KeycloakConnectModule, ResourceGuard, RoleGuard } from "nest-keycloak-connect";
+import { KeycloakService } from "./keycloak/keycloak.service";
+import { KeycloakModule } from "./keycloak/keycloak.module";
+import { APP_GUARD } from "@nestjs/core";
 
 @Module({
   imports: [
@@ -29,9 +32,26 @@ import { AuthModule } from './auth/auth.module';
     }),
     ConfigModule.forRoot({ envFilePath: `.env` }),
     HealthModule,
-    AuthModule,
+    KeycloakConnectModule.registerAsync({
+      useExisting: KeycloakService,
+      imports: [KeycloakModule],
+    }),
+    KeycloakModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ResourceGuard,
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RoleGuard,
+    // },
+  ],
 })
 export class AppModule {}

@@ -1,5 +1,5 @@
 import { Controller, Get } from "@nestjs/common";
-import { HealthCheck, HealthCheckService, HttpHealthIndicator, MongooseHealthIndicator } from "@nestjs/terminus";
+import { HealthCheck, HealthCheckService, MongooseHealthIndicator } from "@nestjs/terminus";
 
 @Controller("health")
 export class HealthController {

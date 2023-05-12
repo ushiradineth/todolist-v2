@@ -4,14 +4,14 @@
 
 type User {
   _id: String!
+  userId: String!
   email: String!
   name: String!
-  Todos: [String!]
 }
 
 type Todo {
   _id: String!
-  userID: String!
+  userId: String!
   todo: String!
   user: User!
   uuid: String!
@@ -20,48 +20,18 @@ type Todo {
 type Query {
   Todos: [Todo!]!
   UserTodos: [Todo!]!
-  Todo(todoInput: String!): Todo!
+  Todo(id: String!): Todo!
+  User: User!
   Users: [User!]!
-  User(UserInput: String!): User!
-  UserByEmail(UserInput: String!): User!
-  UserAuthentication(UserInput: AuthUserDto!): User!
-}
-
-input AuthUserDto {
-  email: String!
-  password: String!
 }
 
 type Mutation {
-  createTodo(todoInput: CreateTodoDto!): Todo!
-  deleteTodo(todoInput: DeleteTodoDto!): Todo!
+  createTodo(todo: String!): Todo!
+  deleteTodo(id: String!): Todo!
   updateTodo(todoInput: UpdateTodoDto!): Todo!
-  CreateUser(UserInput: CreateUserDto!): User!
-  DeleteUser: User!
-  UpdateUser(UserInput: UpdateUserDto!): User!
-}
-
-input CreateTodoDto {
-  todo: String!
-}
-
-input DeleteTodoDto {
-  id: String!
 }
 
 input UpdateTodoDto {
   id: String!
   todo: String!
-}
-
-input CreateUserDto {
-  email: String!
-  name: String!
-  password: String!
-}
-
-input UpdateUserDto {
-  email: String
-  name: String
-  password: String
 }

@@ -1,54 +1,87 @@
-import NextAuth, { type Session, type NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import KeycloakProvider from "next-auth/providers/keycloak";
 import { getClient } from "@/util/apollo-client";
-import { AUTHENTICATE_USER } from "@/util/graphql/user/query";
-import { type JWT } from "next-auth/jwt";
-import jsonwebtoken from "jsonwebtoken";
+import { USER } from "@/util/graphql/user/query";
+import { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth/next";
+import KeycloakProvider from "next-auth/providers/keycloak";
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  accessToken: string;
+  accessTokenExpires: number;
+  refreshToken: string;
+}
+
+async function refreshAccessToken(user: any, refreshToken: string): Promise<User> {
+  const payload = new URLSearchParams({
+    client_id: process.env.NEXT_PUBLIC_KEYCLOAK_ID as string,
+    client_secret: process.env.NEXT_PUBLIC_KEYCLOAK_SECRET as string,
+    grant_type: "refresh_token",
+    refresh_token: refreshToken,
+  });
+
+  const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "POST",
+    body: payload,
+  });
+
+  const refreshedTokens = await response.json();
+
+  const client = getClient(refreshedTokens.access_token);
+
+  await client.query({ query: USER });
+
+  return {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    accessToken: refreshedTokens.access_token,
+    accessTokenExpires: refreshedTokens.expires_in,
+    refreshToken: refreshedTokens.refresh_token,
+  };
+}
 
 export const authOptions: NextAuthOptions = {
-  debug: true,
-  session: {
-    strategy: "jwt",
-  },
-  callbacks: {
-    session(params: { session: Session; token: JWT }) {
-      const encodedToken = jsonwebtoken.sign(params.token, process.env.NEXTAUTH_SECRET || "");
-      params.session.token = encodedToken;
-
-      return params.session;
-    },
-  },
   providers: [
     KeycloakProvider({
       clientId: process.env.KEYCLOAK_ID!,
       clientSecret: process.env.KEYCLOAK_SECRET!,
       issuer: process.env.KEYCLOAK_ISSUER,
       authorization: process.env.KEYCLOAK_AUTHORIZATION,
-      wellKnown: `${process.env.KEYCLOAK_ISSUER}/.well-known/openid-configuration`,
-    }),
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const client = getClient();
-        const { data } = await client.query({ query: AUTHENTICATE_USER, variables: { email: credentials?.email, password: credentials?.password } });
-
-        if (!data) {
-          return null;
-        }
-
-        return {
-          id: data.UserAuthentication._id,
-          email: data.UserAuthentication.email,
-          name: data.UserAuthentication.name,
-        };
-      },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user, account }) {
+      if (user && account) {
+        return {
+          _id: user.id,
+          name: user.name,
+          email: user.email,
+          accessToken: account.access_token,
+          accessTokenExpires: account.expires_at,
+          refreshToken: account.refresh_token,
+        };
+      } else {
+        return await refreshAccessToken(token, token.refreshToken as string);
+      }
+    },
+    async session({ token }) {
+      return {
+        user: {
+          _id: token._id,
+          name: token.name,
+          email: token.email,
+          accessToken: token.accessToken,
+          accessTokenExpires: token.accessTokenExpires,
+          refreshToken: token.refreshToken,
+        },
+      };
+    },
+  },
 };
 
 export default NextAuth(authOptions);

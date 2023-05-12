@@ -15,21 +15,17 @@ export class User {
   @ApiProperty()
   @Field()
   @Prop()
+  userId: string;
+
+  @ApiProperty()
+  @Field()
+  @Prop()
   email: string;
 
   @ApiProperty()
   @Field()
   @Prop()
   name: string;
-
-  @ApiProperty()
-  @Prop()
-  password: string;
-
-  @ApiProperty()
-  @Field((type) => [String], { nullable: true })
-  @Prop({ type: [] })
-  Todos: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

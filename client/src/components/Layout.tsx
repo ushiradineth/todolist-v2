@@ -16,7 +16,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   if (status === "unauthenticated" && !publicURLs.includes(router.pathname)) router.push("/auth");
 
   return (
-    <ApolloProvider client={getClient(session?.token)}>
+    <ApolloProvider client={getClient(session?.user?.accessToken)}>
       <Container>
         {router.pathname !== "/" && <HomeButton />}
         {children}

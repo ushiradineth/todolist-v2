@@ -1,78 +1,62 @@
-import { Logger, Injectable, BadRequestException, UseGuards } from "@nestjs/common";
+import { Logger, Injectable, BadRequestException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { UserService } from "src/user/user.service";
-import { CreateTodoDto } from "./dto/create-todo.dto";
-import { DeleteTodoDto } from "./dto/delete-todo.dto";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
 import { Todo, TodoDocument } from "./todos.model";
-import { JwtService } from "@nestjs/jwt";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 @Injectable()
 export class TodosService {
-  constructor(@InjectModel(Todo.name) private todoModel: Model<TodoDocument>, private readonly userService: UserService, private readonly jwtService: JwtService) {}
+  constructor(@InjectModel(Todo.name) private todoModel: Model<TodoDocument>) {}
   private readonly logger = new Logger(TodosService.name);
 
-  getAllTodos(): Promise<Todo[]> {
+  Todos(): Promise<Todo[]> {
     this.logger.log("Got all todos");
     return this.todoModel.find().exec();
   }
 
-  @UseGuards(JwtAuthGuard)
-  getAllTodosByUserID(token: string): Promise<Todo[]> {
+  async UserTodos(user: AuthenticatedUser): Promise<Todo[]> {
     try {
-      const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
-      this.logger.log("Got all todos by user: " + jwt.sub);
-      return this.todoModel.find({ userID: jwt.sub }).exec();
+      const res = await this.todoModel.find({ userId: user.sub }).exec();
+      this.logger.log("Got all todos by user: " + user.sub);
+      return res;
     } catch (error) {
       this.logger.log(error.toString());
     }
   }
 
-  async getTodoByID(id: string): Promise<Todo> {
-    const res: Todo = await this.todoModel
-      .findById(id)
-      .populate('user');
-    this.logger.log("Got todo id:" + res._id);
+  async Todo(id: string): Promise<Todo> {
+    const res: Todo = await this.todoModel.findById(id).populate("user");
+    this.logger.log("Got todo: " + res._id);
     return res;
   }
 
-  @UseGuards(JwtAuthGuard)
-  async createTodo(createTodoDto: CreateTodoDto, token: string): Promise<Todo> {
+  async createTodo(text: string, user: AuthenticatedUser): Promise<Todo> {
     try {
-      const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
-      const todo = new this.todoModel({ userID: jwt.sub, todo: createTodoDto.todo });
-      this.logger.log("Created todo id: " + todo._id);
-      this.userService.linkTodo(jwt.sub, todo._id);
-      return todo.save();
-    } catch (error) {
-      this.logger.log(error.toString());
-    }
-  }
-
-  @UseGuards(JwtAuthGuard)
-  async updateTodo(updateTodoDto: UpdateTodoDto, token: string): Promise<Todo> {
-    try {
-      const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
-      const todo = await this.todoModel.findOneAndUpdate({ _id: updateTodoDto.id, userID: jwt.sub }, { todo: updateTodoDto.todo });
-      if (!todo) throw new BadRequestException();
-      this.logger.log("Updated todo id: " + todo._id);
+      const todo = new this.todoModel({ userId: user.sub, todo: text });
+      todo.save();
+      this.logger.log("Created todo: " + todo._id);
       return todo;
     } catch (error) {
       this.logger.log(error.toString());
     }
   }
 
-  @UseGuards(JwtAuthGuard)
-  async deleteTodo(deleteTodoDto: DeleteTodoDto, token: string): Promise<Todo> {
+  async updateTodo(updateTodoDto: UpdateTodoDto, user: AuthenticatedUser): Promise<Todo> {
     try {
-      const jwt: JWT = this.jwtService.decode(token.split(" ")[1]) as JWT;
-
-      const todo = await this.todoModel.findOneAndDelete({ _id: deleteTodoDto.id, userID: jwt.sub });
+      const todo = await this.todoModel.findOneAndUpdate({ _id: updateTodoDto.id, userId: user.sub }, { todo: updateTodoDto.todo });
       if (!todo) throw new BadRequestException();
-      this.userService.unlinkTodo(todo.userID, todo._id);
-      this.logger.log("Deleted todo id:" + todo._id);
+      this.logger.log("Updated todo: " + todo._id);
+      return todo;
+    } catch (error) {
+      this.logger.log(error.toString());
+    }
+  }
+
+  async deleteTodo(id: string, user: AuthenticatedUser): Promise<Todo> {
+    try {
+      const todo = await this.todoModel.findOneAndDelete({ _id: id, userId: user.sub });
+      if (!todo) throw new BadRequestException();
+      this.logger.log("Deleted todo:" + todo._id);
       return todo;
     } catch (error) {
       this.logger.log(error.toString());
