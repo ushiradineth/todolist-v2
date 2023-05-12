@@ -11,7 +11,7 @@ import { getSession } from "next-auth/react";
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { req } = ctx;
   const session = await getSession({ req });
-  const client = getClient(session?.token);
+  const client = getClient(session?.user?.accessToken);
 
   try {
     const { data } = await client.query({ query: GET_ALL_TODOS_BY_USER });

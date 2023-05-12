@@ -1,6 +1,7 @@
 import { getClient } from "@/util/apollo-client";
 import { USER } from "@/util/graphql/user/query";
 import { NextAuthOptions } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import NextAuth from "next-auth/next";
 import KeycloakProvider from "next-auth/providers/keycloak";
 
@@ -56,9 +57,12 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account }) {
+      let jwt: JWT;
+
       if (user && account) {
-        return {
+        jwt = {
           _id: user.id,
+          token: user.id,
           name: user.name,
           email: user.email,
           accessToken: account.access_token,
@@ -66,20 +70,31 @@ export const authOptions: NextAuthOptions = {
           refreshToken: account.refresh_token,
         };
       } else {
-        return await refreshAccessToken(token, token.refreshToken as string);
+        const res = await refreshAccessToken(token, token.refreshToken as string);
+        jwt = {
+          _id: res._id,
+          token: res._id,
+          name: res.name,
+          email: res.email,
+          accessToken: res.accessToken,
+          accessTokenExpires: res.accessTokenExpires,
+          refreshToken: res.refreshToken,
+        };
       }
+
+      return jwt;
     },
-    async session({ token }) {
-      return {
-        user: {
-          _id: token._id,
-          name: token.name,
-          email: token.email,
-          accessToken: token.accessToken,
-          accessTokenExpires: token.accessTokenExpires,
-          refreshToken: token.refreshToken,
-        },
+    async session({ token, session }) {
+      session.user = {
+        _id: token._id as string,
+        name: token.name as string,
+        email: token.email as string,
+        accessToken: token.accessToken as string,
+        accessTokenExpires: (token.accessTokenExpires || "").toString(),
+        refreshToken: token.refreshToken as string,
       };
+
+      return session;
     },
   },
 };
