@@ -18,7 +18,7 @@ resource "docker_container" "server" {
   name  = "server-container"
   image = docker_image.server.image_id
 
-  depends_on = [docker_container.mongodb, docker_container.keycloak]
+  depends_on = [docker_container.mongodb, module.keycloak]
 
   ports {
     internal = 3000
@@ -52,7 +52,7 @@ resource "docker_container" "mongodb" {
   name  = "mongodb-container"
   image = docker_image.mongodb.image_id
 
-  env = ["MONGO_INITDB_ROOT_USERNAME=ushira", "MONGO_INITDB_ROOT_PASSWORD=ushira"]
+  env = ["MONGO_INITDB_ROOT_USERNAME=${var.TF_VARS_MONGO_INITDB_ROOT_USERNAME}", "MONGO_INITDB_ROOT_PASSWORD=${var.TF_VARS_MONGO_INITDB_ROOT_PASSWORD}"]
 
   ports {
     internal = 27017
@@ -60,21 +60,8 @@ resource "docker_container" "mongodb" {
   }
 }
 
-// Keycloak
-resource "docker_image" "keycloak" {
-  name = "quay.io/keycloak/keycloak:21.0.1"
-}
-
-resource "docker_container" "keycloak" {
-  name  = "keycloak-container"
-  image = docker_image.keycloak.image_id
-
-  env = ["KEYCLOAK_ADMIN=admin", "KEYCLOAK_ADMIN_PASSWORD=admin"]
-
-  command = ["start-dev"]
-
-  ports {
-    internal = 8080
-    external = 8080
-  }
+module "keycloak" {
+  source = "./modules/keycloak"
+  TF_VARS_KEYCLOAK_ADMIN=var.TF_VARS_KEYCLOAK_ADMIN
+  TF_VARS_KEYCLOAK_ADMIN_PASSWORD=var.TF_VARS_KEYCLOAK_ADMIN_PASSWORD
 }
