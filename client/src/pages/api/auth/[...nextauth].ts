@@ -12,6 +12,7 @@ interface User {
   accessToken: string;
   accessTokenExpires: number;
   refreshToken: string;
+  id_token: string;
 }
 
 async function refreshAccessToken(user: any, refreshToken: string): Promise<User> {
@@ -43,6 +44,7 @@ async function refreshAccessToken(user: any, refreshToken: string): Promise<User
     accessToken: refreshedTokens.access_token,
     accessTokenExpires: refreshedTokens.expires_in,
     refreshToken: refreshedTokens.refresh_token,
+    id_token: refreshedTokens.id_token,
   };
 }
 
@@ -68,6 +70,7 @@ export const authOptions: NextAuthOptions = {
           accessToken: account.access_token,
           accessTokenExpires: account.expires_at,
           refreshToken: account.refresh_token,
+          id_token: account.id_token!,
         };
       } else {
         const res = await refreshAccessToken(token, token.refreshToken as string);
@@ -79,6 +82,7 @@ export const authOptions: NextAuthOptions = {
           accessToken: res.accessToken,
           accessTokenExpires: res.accessTokenExpires,
           refreshToken: res.refreshToken,
+          id_token: res.id_token,
         };
       }
 
@@ -92,9 +96,18 @@ export const authOptions: NextAuthOptions = {
         accessToken: token.accessToken as string,
         accessTokenExpires: (token.accessTokenExpires || "").toString(),
         refreshToken: token.refreshToken as string,
+        id_token: token.id_token,
       };
 
       return session;
+    },
+  },
+
+  events: {
+    async signOut({ token }: { token: JWT }) {
+      const logOutUrl = new URL(`${process.env.NEXT_PUBLIC_AUTH_ISSUER}/protocol/openid-connect/logout`);
+      logOutUrl.searchParams.set("id_token_hint", token.id_token!);
+      await fetch(logOutUrl);
     },
   },
 };

@@ -6,6 +6,7 @@ import { StyledLink } from "@/components/styles/Link.styled";
 import Title from "@/components/Title";
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { status } = useSession();
@@ -49,15 +50,7 @@ function Profile() {
   return (
     <Card>
       <p>{session?.user?.email}</p>
-      <Button
-        onClick={() =>
-          signOut({
-            callbackUrl: `${process.env.NEXT_PUBLIC_AUTH_ISSUER}/protocol/openid-connect/logout`,
-          })
-        }
-        text={"Sign Out"}
-        disabled={false}
-      />
+      <Button onClick={() => signOut()} text={"Sign Out"} disabled={false} />
     </Card>
   );
 }

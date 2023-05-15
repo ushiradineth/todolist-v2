@@ -12,6 +12,7 @@ declare module "next-auth" {
       accessToken:  string;
       accessTokenExpires:  string;
       refreshToken:  string;
+      id_token: string;
     };
   }
 }
@@ -19,6 +20,8 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
   interface JWT {
+    id_token: string;
+    accessToken?: string;
     refreshTokenExpires?: number;
     accessTokenExpires?: number;
     refreshToken?: string;
