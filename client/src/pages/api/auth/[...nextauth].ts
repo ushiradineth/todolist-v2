@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.KEYCLOAK_ID!,
       clientSecret: process.env.KEYCLOAK_SECRET!,
       issuer: process.env.KEYCLOAK_ISSUER,
-      authorization: process.env.KEYCLOAK_AUTHORIZATION,
+      authorization: process.env.KEYCLOAK_ISSUER + "/protocol/openid-connect/auth",
     }),
   ],
   callbacks: {
