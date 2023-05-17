@@ -15,7 +15,7 @@ resource "docker_container" "keycloak" {
   name  = "keycloak-container"
   image = docker_image.keycloak.image_id
 
-  env = ["KEYCLOAK_ADMIN=${var.TF_VARS_KEYCLOAK_ADMIN}", "KEYCLOAK_ADMIN_PASSWORD=${var.TF_VARS_KEYCLOAK_ADMIN_PASSWORD}"]
+  env = ["KEYCLOAK_ADMIN=${var.KEYCLOAK_ADMIN}", "KEYCLOAK_ADMIN_PASSWORD=${var.KEYCLOAK_ADMIN_PASSWORD}"]
 
   command = ["start-dev"]
 

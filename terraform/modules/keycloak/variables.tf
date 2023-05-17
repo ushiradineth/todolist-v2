@@ -1,7 +1,7 @@
-variable "TF_VARS_KEYCLOAK_ADMIN" {
+variable "KEYCLOAK_ADMIN" {
   type = string
 }
 
-variable "TF_VARS_KEYCLOAK_ADMIN_PASSWORD" {
+variable "KEYCLOAK_ADMIN_PASSWORD" {
   type = string
 }

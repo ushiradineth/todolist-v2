@@ -19,6 +19,7 @@ resource "docker_container" "server" {
   image = docker_image.server.image_id
 
   depends_on = [docker_container.mongodb, module.keycloak]
+  env        = ["KEYCLOAK_SECRET=${var.KEYCLOAK_SERVER_SECRET}", "KEYCLOAK_URL=http://host.docker.internal:${module.keycloak.KEYCLOAK_EXTERNAL_PORT}", "KEYCLOAK_REALM=${var.KEYCLOAK_REALM}", "KEYCLOAK_CLIENT_ID=${var.KEYCLOAK_SERVER_CLIENT_ID}"]
 
   ports {
     internal = 3000
@@ -37,6 +38,8 @@ resource "docker_container" "client" {
 
   depends_on = [docker_container.server]
 
+  env = ["KEYCLOAK_SECRET=${var.KEYCLOAK_CLIENT_SECRET}", "NEXT_PUBLIC_KEYCLOAK_SECRET=${var.KEYCLOAK_CLIENT_SECRET}", "KEYCLOAK_ISSUER=http://host.docker.internal:${module.keycloak.KEYCLOAK_EXTERNAL_PORT}/realms/${var.KEYCLOAK_REALM}", "NEXT_PUBLIC_AUTH_ISSUER=http://host.docker.internal:${module.keycloak.KEYCLOAK_EXTERNAL_PORT}/realms/${var.KEYCLOAK_REALM}", "KEYCLOAK_ID=${var.KEYCLOAK_CLIENT_CLIENT_ID}", "NEXT_PUBLIC_KEYCLOAK_ID=${var.KEYCLOAK_CLIENT_CLIENT_ID}"]
+
   ports {
     internal = 3001
     external = 3001
@@ -52,7 +55,7 @@ resource "docker_container" "mongodb" {
   name  = "mongodb-container"
   image = docker_image.mongodb.image_id
 
-  env = ["MONGO_INITDB_ROOT_USERNAME=${var.TF_VARS_MONGO_INITDB_ROOT_USERNAME}", "MONGO_INITDB_ROOT_PASSWORD=${var.TF_VARS_MONGO_INITDB_ROOT_PASSWORD}"]
+  env = ["MONGO_INITDB_ROOT_USERNAME=${var.MONGO_INITDB_ROOT_USERNAME}", "MONGO_INITDB_ROOT_PASSWORD=${var.MONGO_INITDB_ROOT_PASSWORD}"]
 
   ports {
     internal = 27017
@@ -61,7 +64,7 @@ resource "docker_container" "mongodb" {
 }
 
 module "keycloak" {
-  source = "./modules/keycloak"
-  TF_VARS_KEYCLOAK_ADMIN=var.TF_VARS_KEYCLOAK_ADMIN
-  TF_VARS_KEYCLOAK_ADMIN_PASSWORD=var.TF_VARS_KEYCLOAK_ADMIN_PASSWORD
+  source                  = "./modules/keycloak"
+  KEYCLOAK_ADMIN          = var.KEYCLOAK_ADMIN
+  KEYCLOAK_ADMIN_PASSWORD = var.KEYCLOAK_ADMIN_PASSWORD
 }

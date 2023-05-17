@@ -1,15 +1,39 @@
-variable "TF_VARS_MONGO_INITDB_ROOT_USERNAME" {
+variable "MONGO_INITDB_ROOT_USERNAME" {
   type = string
 }
 
-variable "TF_VARS_MONGO_INITDB_ROOT_PASSWORD" {
+variable "MONGO_INITDB_ROOT_PASSWORD" {
+  type      = string
+  sensitive = true
+}
+
+variable "KEYCLOAK_ADMIN" {
   type = string
 }
 
-variable "TF_VARS_KEYCLOAK_ADMIN" {
+variable "KEYCLOAK_ADMIN_PASSWORD" {
+  type      = string
+  sensitive = true
+}
+
+variable "KEYCLOAK_CLIENT_SECRET" {
+  type      = string
+  sensitive = true
+}
+
+variable "KEYCLOAK_SERVER_SECRET" {
+  type      = string
+  sensitive = true
+}
+
+variable "KEYCLOAK_REALM" {
   type = string
 }
 
-variable "TF_VARS_KEYCLOAK_ADMIN_PASSWORD" {
+variable "KEYCLOAK_CLIENT_CLIENT_ID" {
+  type = string
+}
+
+variable "KEYCLOAK_SERVER_CLIENT_ID" {
   type = string
 }
