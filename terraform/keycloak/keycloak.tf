@@ -7,6 +7,8 @@ terraform {
   }
 }
 
+provider "docker" {}
+
 resource "docker_image" "keycloak" {
   name = "quay.io/keycloak/keycloak:21.0.1"
 }

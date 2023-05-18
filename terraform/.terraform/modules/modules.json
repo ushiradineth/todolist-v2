@@ -1,1 +1,1 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"keycloak","Source":"./modules/keycloak","Dir":"modules/keycloak"}]}
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"client","Source":"./client","Dir":"client"},{"Key":"keycloak","Source":"./keycloak","Dir":"keycloak"},{"Key":"mongodb","Source":"./mongodb","Dir":"mongodb"},{"Key":"server","Source":"./server","Dir":"server"}]}
